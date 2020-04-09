@@ -51,7 +51,6 @@ file = open(args.testfile, 'r')
 testfiles = file.readlines()
 
 train_generator = BalanceDataGenerator(trainfiles, input_shape=(args.img_size,args.img_size), datadir=args.data_path, is_training=True,args=args)
-pdb.set_trace()
 test_generator = DataGenerator(testfiles, input_shape=(args.img_size,args.img_size), datadir=args.data_path, is_training=False)
 
 
