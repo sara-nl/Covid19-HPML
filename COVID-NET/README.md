@@ -96,10 +96,8 @@ python -u train_keras.py \
 --model resnet50v2 \
 --checkpoint /home/$USER/Covid19-HPML/output/covid-net-resnet512-lr2e-05/cp-04-0.93.hdf5
 ```
-​
-​
-​
-​
+
+
 ## Results
 These are the final results for COVID-Net with a ResNet50v2 backbone with img_size (512,512,3).   
 ​
