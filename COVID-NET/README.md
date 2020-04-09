@@ -1,21 +1,24 @@
 # Covid19-HPML
-​
-​
+
+
 **Note: The COVID-Net models provided here are intended to be used as reference models that can be built upon and enhanced as new data becomes available. They are currently at a research stage and not yet intended as production-ready models (not meant for direct clinicial diagnosis), and we are working continuously to improve them as new data becomes available. Please do not use COVID-Net for self-diagnosis and seek help from your local health authorities.**
-​
-​
+
+
 **SURFSara COVID-Net team: Valeriu Codreanu, Damian Podareanu, Ruben Hekster, Maxwell Cai, Joris Mollinga**
+
+
 The world-wide pandemic response with regard to data and computer science includes so far analysing the spread of the virus, designing novel treatments or vaccines, understanding and predicting individual patient evolution as well as these implications on the healthcare system. 
-​
+
+
 As a cooperative association of the Dutch educational and research institutions, including the academic medical centers, SURF aims to support the efforts of all our members fighting against the COVID-19 pandemic. Besides offering a fast track for accessing the SURF infrastructure, we aim to offer a vision for the use of the national large-scale data, networking, compute services and expertise, in order to support researchers and to collaboratively work on this global problem. 
-​
-​
+
+
 If there are any technical questions, please contact:
 * valeriu.codreanu@surfsara.nl
 * rubenh@surfsara.nl
-​
-​
-​
+
+
+
 ## Requirements
 ​
 The main requirements are listed below:
@@ -40,10 +43,9 @@ Additional requirements to generate dataset:
 The current COVIDx dataset is constructed by the following open source chest radiography datasets:
 * https://github.com/ieee8023/covid-chestxray-dataset
 * https://www.kaggle.com/c/rsna-pneumonia-detection-challenge
-​
-Furthermore we extended the dataset with 204 COVD-19 positive cases  
-​
-​
+
+
+Furthermore we extended the dataset with 204 COVID-19 positive cases: 
 ### COVIDx data distribution
 ​
 Chest radiography images distribution
@@ -51,9 +53,8 @@ Chest radiography images distribution
 |:-----:|:------:|:---------:|:--------:|:-----:|
 | train |  7966  |    8514   |    234   | 16714 |
 |  test |   100  |     100   |    46    |   246 |
-​
-​
-​
+
+
 ## Training and Evaluation
 The network takes as input an image of shape (N, 512, 512, 3) and outputs the softmax probabilities as (N, 3), where N is the number of batches.
 If using the TF checkpoints, here are some useful tensors:
@@ -136,14 +137,19 @@ These are the final results for COVID-Net with a ResNet50v2 backbone with img_si
     <td class="tg-c3ow">97.7</td>
   </tr>
 </table></div>
-​
-​
-​
+
+
+
+## Confusion Matrix ResNet50v2@(512)
+
+|         | Normal|Pneumonia |  COVID-19 |
+|:-------:|:-----:|:--------:|:---------:|
+|Normal   |   96  |    4     |     0     |
+|Pneumonia|    7  |   92     |     1     |
+|COVID-19 |    0  |    3     |    43     | 
+
 ## Pretrained Models
-​
 |  Type | COVID-19 Sensitivity |  Link               |
 |:-----:|:--------------------:|:-------------------:|
-|  hdf5 |         89.0         | [COVID-Net 224](https://drive.google.com/file/d/1xrxK9swFVlFI-WAYcccIgm0tt9RgawXD/view?usp=sharing)|
-|  hdf5 |         93.5         | [COVID-Net 512](https://drive.google.com/file/d/1djqWcxzRehtyJV9EQsppj1YdgsP2JRQy/view?usp=sharing)|
-​
-​
+|  hdf5 |         89.0         | [COVID-Net 224](tba)|
+|  hdf5 |         93.5         | [COVID-Net 512](tba)|
