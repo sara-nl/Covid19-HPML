@@ -100,10 +100,10 @@ python -u train_keras.py \
 
 ## Results
 These are the final results for COVID-Net with a ResNet50v2 backbone with img_size (512,512,3).   
-​
+
+
 ### COVIDNet ResNet50v2@(512)
-​
-​
+
 <div class="tg-wrap" align="center"><table class="tg">
   <tr>
     <th class="tg-7btt" colspan="3">Sensitivity (%)</th>
@@ -135,7 +135,6 @@ These are the final results for COVID-Net with a ResNet50v2 backbone with img_si
     <td class="tg-c3ow">97.7</td>
   </tr>
 </table></div>
-
 
 
 ## Confusion Matrix ResNet50v2@(512)
