@@ -64,14 +64,8 @@ Chest radiography images distribution
 
 ## Training and Evaluation
 The network takes as input an image of shape (N, 512, 512, 3) and outputs the softmax probabilities as (N, 3), where N is the number of batches.
-If using the TF checkpoints, here are some useful tensors:
-​
-* input tensor: `input_1:0`
-* output tensor: `dense_3/Softmax:0`
-* label tensor: `dense_3_target:0`
-* class weights tensor: `dense_3_sample_weights:0`
-* loss tensor: `loss/mul:0`
-​
+
+
 ### Steps for training
 Releasing TF training script from pretrained model soon.
 
