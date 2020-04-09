@@ -140,11 +140,11 @@ These are the final results for COVID-Net with a ResNet50v2 backbone with img_si
 
 ## Confusion Matrix ResNet50v2@(512)
 
-         | Normal|Pneumonia |  COVID-19 |
-         |:-----:|:--------:|:---------:|
-Normal   |   96  |    4     |     0     |
-Pneumonia|    7  |   92     |     1     |
-COVID-19 |    0  |    3     |    43     | 
+|         | Normal|Pneumonia |  COVID-19 |
+|:-------:|:-----:|:--------:|:---------:|
+|Normal   |   96  |    4     |     0     |
+|Pneumonia|    7  |   92     |     1     |
+|COVID-19 |    0  |    3     |    43     | 
 
 ## Pretrained Models
 ​
