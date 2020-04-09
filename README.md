@@ -45,9 +45,7 @@ The current COVIDx dataset is constructed by the following open source chest rad
 * https://www.kaggle.com/c/rsna-pneumonia-detection-challenge
 
 
-Furthermore we extended the dataset with 204 COVD-19 positive cases  
-​
-​
+Furthermore we extended the dataset with 204 COVID-19 positive cases: 
 ### COVIDx data distribution
 ​
 Chest radiography images distribution
