@@ -51,9 +51,8 @@ Chest radiography images distribution
 |:-----:|:------:|:---------:|:--------:|:-----:|
 | train |  7966  |    8514   |    234   | 16714 |
 |  test |   100  |     100   |    46    |   246 |
-​
-​
-​
+
+
 ## Training and Evaluation
 The network takes as input an image of shape (N, 512, 512, 3) and outputs the softmax probabilities as (N, 3), where N is the number of batches.
 If using the TF checkpoints, here are some useful tensors:
@@ -136,14 +135,22 @@ These are the final results for COVID-Net with a ResNet50v2 backbone with img_si
     <td class="tg-c3ow">97.7</td>
   </tr>
 </table></div>
-​
-​
-​
+
+
+
+## Confusion Matrix ResNet50v2@(512)
+
+         | Normal|Pneumonia |  COVID-19 |
+         |:-----:|:--------:|:---------:|
+Normal   |   96  |    4     |     0     |
+Pneumonia|    7  |   92     |     1     |
+COVID-19 |    0  |    3     |    43     | 
+
 ## Pretrained Models
 ​
 |  Type | COVID-19 Sensitivity |  Link               |
 |:-----:|:--------------------:|:-------------------:|
-|  hdf5 |         89.0         | [COVID-Net 224](https://drive.google.com/file/d/1xrxK9swFVlFI-WAYcccIgm0tt9RgawXD/view?usp=sharing)|
-|  hdf5 |         93.5         | [COVID-Net 512](https://drive.google.com/file/d/1djqWcxzRehtyJV9EQsppj1YdgsP2JRQy/view?usp=sharing)|
+|  hdf5 |         89.0         | [COVID-Net 224](tba)|
+|  hdf5 |         93.5         | [COVID-Net 512](tba)|
 ​
 ​
