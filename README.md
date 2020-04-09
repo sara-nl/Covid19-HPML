@@ -121,7 +121,8 @@ These are the final results for COVID-Net with a ResNet50v2 backbone with img_si
     <td class="tg-c3ow">93.5</td>
   </tr>
 </table></div>
-​
+
+
 <div class="tg-wrap"><table class="tg">
   <tr>
     <th class="tg-7btt" colspan="3">Positive Predictive Value (%)</th>
@@ -138,6 +139,21 @@ These are the final results for COVID-Net with a ResNet50v2 backbone with img_si
   </tr>
 </table></div>
 
+<div class="tg-wrap"><table class="tg">
+  <tr>
+    <th class="tg-7btt" colspan="3">Metrics (%)</th>
+  </tr>
+  <tr>
+    <td class="tg-7btt">Recall</td>
+    <td class="tg-7btt">Precision</td>
+    <td class="tg-7btt">F1 - Score</td>
+  </tr>
+  <tr>
+    <td class="tg-c3ow">92.4</td>
+    <td class="tg-c3ow">90.0</td>
+    <td class="tg-c3ow">90.7</td>
+  </tr>
+</table></div>
 
 
 ## Confusion Matrix ResNet50v2@(512)
