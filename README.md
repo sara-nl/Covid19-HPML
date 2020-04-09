@@ -94,7 +94,7 @@ python -u train_keras.py \
 --epochs 10 \
 --name covid-net-resnet512- \
 --model resnet50v2 \
---checkpoint /home/$USER/Covid19-HPML/output/covid-net-resnet512-lr2e-05/cp-04-0.93.hdf5
+--checkpoint /home/rubenh/Covid19-HPML/checkpoint/cp-512.hdf5
 ```
 ​
 ​
@@ -149,7 +149,7 @@ These are the final results for COVID-Net with a ResNet50v2 backbone with img_si
 |COVID-19 |    0  |    3     |    43     | 
 
 ## Pretrained Models
-|  Type | COVID-19 Sensitivity |  Link               |
-|:-----:|:--------------------:|:-------------------:|
-|  hdf5 |         89.0         | [COVID-Net 224](tba)|
-|  hdf5 |         93.5         | [COVID-Net 512](tba)|
+|  Type | COVID-19 Sensitivity |                       Path                        |
+|:-----:|:--------------------:|:-------------------------------------------------:|
+|  hdf5 |         89.0         | `/home/rubenh/Covid19-HPML/checkpoint/cp-224.hdf5`|
+|  hdf5 |         93.5         | `/home/rubenh/Covid19-HPML/checkpoint/cp-512.hdf5`|
