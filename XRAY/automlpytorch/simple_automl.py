@@ -17,7 +17,7 @@ def get_data_references(images = [] , labels = [] , filter = "_positive.txt", co
     If you don't  want to copy set copy_to = None
     balance = 180 means each class gets 180 examples before splits
     '''
-    for name in glob.glob("../XRAY/*{}".format(filter)):
+    for name in glob.glob("../data/*{}".format(filter)):
         for i, imagepaths in enumerate(open(name).readlines()):
             if i==balance:
                 break
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     #autopytorch format
     X = [np.asarray(x).flatten() for x in X]
     #Split the dataset
-    X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(np.asarray(X, dtype=np.float16), np.asarray(labels, dtype=np.uint8), random_state=1, test_size=0.1, shuffle=True)
+    X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(np.asarray(X, dtype=np.float32), np.asarray(labels, dtype=np.uint8), random_state=1, test_size=0.1, shuffle=True)
     scaler = preprocessing.StandardScaler()
     scaler.fit(X_train)
     X_train = scaler.transform(X_train)
@@ -80,17 +80,18 @@ if __name__ == "__main__":
     #Init autonet
     # autoPyTorch = AutoNetClassification(hyperparameter_search_space_updates=search_space_updates,  # config 
     autoPyTorch = AutoNetClassification(
-                                        # "full_cs",  # config 
-                                        networks=["resnet"],
+                                        "tiny_cs",  # config 
+                                        # networks=["resnet"],
                                         # torch_num_threads=2, 
                                         log_level='info',
                                         budget_type='epochs',
                                         min_budget=5,
                                         max_budget=20,
-                                        num_iterations=100,
+                                        num_iterations=30, #magical lipschitz value = 20 updates / stochastic process
                                         cuda=True, use_pynisher=False)
+    search_space_updates = HyperparameterSearchSpaceUpdates()
     #fit
-    autoPyTorch.fit(X_train=X_train, Y_train=y_train, X_valid=X_test, Y_valid=y_test, optimize_metric="auc_metric", loss_modules=["cross_entropy", "cross_entropy_weighted"])
+    autoPyTorch.fit(X_train=X_train, Y_train=y_train, X_valid=X_test, Y_valid=y_test, optimize_metric="accuracy")
     #predict
     y_pred = autoPyTorch.predict(X_test)
     #check
