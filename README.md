@@ -20,9 +20,9 @@ If there are any technical questions, please contact:
 
 
 ## Requirements
-​
+
 The main requirements are listed below:
-​
+
 * Tested with Tensorflow 1.13 and 1.15
 * OpenCV 4.2.0
 * Python 3.6
@@ -30,13 +30,20 @@ The main requirements are listed below:
 * OpenCV
 * Scikit-Learn
 * Matplotlib
-​
+
 Additional requirements to generate dataset:
-​
 * PyDicom
 * Pandas
 * Jupyter
-​
+
+
+On **LISA** TitanRTX GPU:
+```
+module use /home/rubenh/environment-modules-lisa
+module load 2020
+module load TensorFlow/1.15.0-foss-2019b-Python-3.7.4-10.1.243
+```
+
 ## COVIDx Dataset
 ​
 ​
@@ -67,7 +74,7 @@ If using the TF checkpoints, here are some useful tensors:
 ​
 ### Steps for training
 Releasing TF training script from pretrained model soon.
-​
+
 1. To train from scratch:
 ```
 python -u train_keras.py \
