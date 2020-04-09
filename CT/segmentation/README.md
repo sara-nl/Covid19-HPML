@@ -21,9 +21,11 @@ These models are located in the *models* folder.
 The fully convolutional models can take an input image of any dimension, as long as it has three input channels. The network takes as input an image of shape (N, 3, H, W) and outputs the logits probabilities as (N, num_classes, H, W). The path to the data is now hard coded in *dataset.py*. For running on your own data, you will have to change that. Below I give a few examples of command that can be used to rerun training to reproduce results:
 
 To run the UNet model:
+
 `python3 main.py --model unet` 
 
 To run the Deeplab V3+ with Xception backbone:
+
 `python3 main.py --model deeplabv3+ --backbone xception`
 
 Check *options.py* for other command line options. 
