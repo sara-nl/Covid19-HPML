@@ -20,9 +20,9 @@ If there are any technical questions, please contact:
 
 
 ## Requirements
-​
+
 The main requirements are listed below:
-​
+
 * Tested with Tensorflow 1.13 and 1.15
 * OpenCV 4.2.0
 * Python 3.6
@@ -30,13 +30,20 @@ The main requirements are listed below:
 * OpenCV
 * Scikit-Learn
 * Matplotlib
-​
+
 Additional requirements to generate dataset:
-​
 * PyDicom
 * Pandas
 * Jupyter
-​
+
+
+On **LISA** TitanRTX GPU:
+```
+module use /home/rubenh/environment-modules-lisa
+module load 2020
+module load TensorFlow/1.15.0-foss-2019b-Python-3.7.4-10.1.243
+```
+
 ## COVIDx Dataset
 ​
 ​
@@ -57,17 +64,11 @@ Chest radiography images distribution
 
 ## Training and Evaluation
 The network takes as input an image of shape (N, 512, 512, 3) and outputs the softmax probabilities as (N, 3), where N is the number of batches.
-If using the TF checkpoints, here are some useful tensors:
-​
-* input tensor: `input_1:0`
-* output tensor: `dense_3/Softmax:0`
-* label tensor: `dense_3_target:0`
-* class weights tensor: `dense_3_sample_weights:0`
-* loss tensor: `loss/mul:0`
-​
+
+
 ### Steps for training
 Releasing TF training script from pretrained model soon.
-​
+
 1. To train from scratch:
 ```
 python -u train_keras.py \
@@ -77,12 +78,11 @@ python -u train_keras.py \
 --img_size 512 \
 --lr 0.00002 \
 --bs 8 \
---epochs 10 \
+--epochs 5 \
 --name covid-net-resnet512- \
 --model resnet50v2
 ```
 2. To train from an existing hdf5 file:
-​
 ```
 python -u train_keras.py \
 --trainfile train_COVIDx.txt \
@@ -91,15 +91,14 @@ python -u train_keras.py \
 --img_size 512 \
 --lr 0.00002 \
 --bs 8 \
---epochs 10 \
+--epochs 5 \
 --name covid-net-resnet512- \
 --model resnet50v2 \
---checkpoint /home/$USER/Covid19-HPML/output/covid-net-resnet512-lr2e-05/cp-04-0.93.hdf5
+--checkpoint /home/rubenh/Covid19-HPML/checkpoint/cp-512.hdf5
 ```
 
-
 ## Results
-These are the final results for COVID-Net with a ResNet50v2 backbone with img_size (512,512,3).   
+These are the final results for COVID-Net with a ResNet50v2 backbone with img_size (512,512,3) trained for 5 epochs.  
 
 
 ### COVIDNet ResNet50v2@(512)
@@ -119,7 +118,8 @@ These are the final results for COVID-Net with a ResNet50v2 backbone with img_si
     <td class="tg-c3ow">93.5</td>
   </tr>
 </table></div>
-​
+
+
 <div class="tg-wrap"><table class="tg">
   <tr>
     <th class="tg-7btt" colspan="3">Positive Predictive Value (%)</th>
@@ -136,6 +136,22 @@ These are the final results for COVID-Net with a ResNet50v2 backbone with img_si
   </tr>
 </table></div>
 
+<div class="tg-wrap"><table class="tg">
+  <tr>
+    <th class="tg-7btt" colspan="3">Metrics (%)</th>
+  </tr>
+  <tr>
+    <td class="tg-7btt">Recall</td>
+    <td class="tg-7btt">Precision</td>
+    <td class="tg-7btt">F1 - Score</td>
+  </tr>
+  <tr>
+    <td class="tg-c3ow">92.4</td>
+    <td class="tg-c3ow">90.0</td>
+    <td class="tg-c3ow">90.7</td>
+  </tr>
+</table></div>
+
 
 ## Confusion Matrix ResNet50v2@(512)
 
@@ -146,7 +162,7 @@ These are the final results for COVID-Net with a ResNet50v2 backbone with img_si
 |COVID-19 |    0  |    3     |    43     | 
 
 ## Pretrained Models
-|  Type | COVID-19 Sensitivity |  Link               |
-|:-----:|:--------------------:|:-------------------:|
-|  hdf5 |         89.0         | [COVID-Net 224](tba)|
-|  hdf5 |         93.5         | [COVID-Net 512](tba)|
+|  Type | COVID-19 Sensitivity |                       Path                        |
+|:-----:|:--------------------:|:-------------------------------------------------:|
+|  hdf5 |         89.0         | `/home/rubenh/Covid19-HPML/checkpoint/cp-224.hdf5`|
+|  hdf5 |         93.5         | `/home/rubenh/Covid19-HPML/checkpoint/cp-512.hdf5`|
