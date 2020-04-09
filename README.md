@@ -43,7 +43,8 @@ Additional requirements to generate dataset:
 The current COVIDx dataset is constructed by the following open source chest radiography datasets:
 * https://github.com/ieee8023/covid-chestxray-dataset
 * https://www.kaggle.com/c/rsna-pneumonia-detection-challenge
-​
+
+
 Furthermore we extended the dataset with 204 COVD-19 positive cases  
 ​
 ​
