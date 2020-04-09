@@ -50,9 +50,8 @@ module load TensorFlow/1.15.0-foss-2019b-Python-3.7.4-10.1.243
 The current COVIDx dataset is constructed by the following open source chest radiography datasets:
 * https://github.com/ieee8023/covid-chestxray-dataset
 * https://www.kaggle.com/c/rsna-pneumonia-detection-challenge
-
-
-Furthermore we extended the dataset with 204 COVID-19 positive cases: 
+* https://github.com/hellorp1990/Covid-19-USF
+ 
 ### COVIDx data distribution
 ​
 Chest radiography images distribution
