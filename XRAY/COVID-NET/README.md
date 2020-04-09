@@ -45,15 +45,16 @@ module load TensorFlow/1.15.0-foss-2019b-Python-3.7.4-10.1.243
 ```
 
 ## COVIDx Dataset
-​
-​
+
+
 The current COVIDx dataset is constructed by the following open source chest radiography datasets:
 * https://github.com/ieee8023/covid-chestxray-dataset
 * https://www.kaggle.com/c/rsna-pneumonia-detection-challenge
 * https://github.com/hellorp1990/Covid-19-USF
  
 ### COVIDx data distribution
-​
+
+
 Chest radiography images distribution
 |  Type | Normal | Pneumonia | COVID-19 | Total |
 |:-----:|:------:|:---------:|:--------:|:-----:|
@@ -66,7 +67,6 @@ The network takes as input an image of shape (N, 512, 512, 3) and outputs the so
 
 
 ### Steps for training
-Releasing TF training script from pretrained model soon.
 
 1. To train from scratch:
 ```
