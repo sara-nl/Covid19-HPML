@@ -10,8 +10,9 @@ import os, pathlib, argparse
 import cv2
 from sklearn.metrics import confusion_matrix
 from data import DataGenerator, BalanceDataGenerator, Metrics
+from pprint import pprint
 
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3'  # which gpu to train on
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'  # which gpu to train on
 
 # TO-DO: add argparse when converting to script
 parser = argparse.ArgumentParser(description='COVID-Net Training')
@@ -25,9 +26,11 @@ parser.add_argument('--epochs', default=10, type=int, help='Number of epochs')
 parser.add_argument('--name', default='COVIDNet', type=str, help='Name of training folder')
 parser.add_argument('--checkpoint', default='', type=str, help='Start training from existing weights')
 parser.add_argument('--model', default='resnet50v2', type=str, help='Start training with model specification')
+parser.add_argument('--datapipeline', default='covidx', type=str, help='Which data to use covidx | chexpert')
+parser.add_argument('--val_split', default=0.1, type=float, help='What validation split to use')
  
 args = parser.parse_args()
-print(args)
+pprint(vars(args))
 
 mapping = {'normal': 0, 'pneumonia': 1, 'COVID-19': 2}
 class_weight = {0: 1., 1: 1., 2: 25.}
@@ -47,7 +50,8 @@ trainfiles = file.readlines()
 file = open(args.testfile, 'r')
 testfiles = file.readlines()
 
-train_generator = BalanceDataGenerator(trainfiles, input_shape=(args.img_size,args.img_size), datadir=args.data_path, is_training=True)
+train_generator = BalanceDataGenerator(trainfiles, input_shape=(args.img_size,args.img_size), datadir=args.data_path, is_training=True,args=args)
+pdb.set_trace()
 test_generator = DataGenerator(testfiles, input_shape=(args.img_size,args.img_size), datadir=args.data_path, is_training=False)
 
 
