@@ -137,7 +137,7 @@ These are the final results for COVID-Net with a ResNet50v2 backbone with img_si
 
 <div class="tg-wrap"><table class="tg">
   <tr>
-    <th class="tg-7btt" colspan="3">Metrics (%)</th>
+    <th class="tg-7btt" colspan="3">Metrics (Macro - average %)</th>
   </tr>
   <tr>
     <td class="tg-7btt">Recall</td>
@@ -145,9 +145,9 @@ These are the final results for COVID-Net with a ResNet50v2 backbone with img_si
     <td class="tg-7btt">F1 - Score</td>
   </tr>
   <tr>
-    <td class="tg-c3ow">92.4</td>
-    <td class="tg-c3ow">90.0</td>
-    <td class="tg-c3ow">90.7</td>
+    <td class="tg-c3ow">95.7</td>
+    <td class="tg-c3ow">94.7</td>
+    <td class="tg-c3ow">94.4</td>
   </tr>
 </table></div>
 
