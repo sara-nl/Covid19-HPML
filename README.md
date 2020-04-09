@@ -5,7 +5,9 @@
 ​
 ​
 **SURFSara COVID-Net team: Valeriu Codreanu, Damian Podareanu, Ruben Hekster, Maxwell Cai, Joris Mollinga**
-Executive summary
+
+
+
 The world-wide pandemic response with regard to data and computer science includes so far analysing the spread of the virus, designing novel treatments or vaccines, understanding and predicting individual patient evolution as well as these implications on the healthcare system. 
 
 As a cooperative association of the Dutch educational and research institutions, including the academic medical centers, SURF aims to support the efforts of all our members fighting against the COVID-19 pandemic. Besides offering a fast track for accessing the SURF infrastructure, we aim to offer a vision for the use of the national large-scale data, networking, compute services and expertise, in order to support researchers and to collaboratively work on this global problem. 
