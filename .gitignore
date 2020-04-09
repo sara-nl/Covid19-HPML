@@ -1,0 +1,16 @@
+
+*.pyc
+*__pycache__*
+*data/*
+*jpg*
+*png*
+*jpeg*
+*out*
+*tb-logs*
+*checkpoint*
+*output*
+*assets*
+*rsna-pneumonia-detection-challenge*
+
+
+
