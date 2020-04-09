@@ -59,7 +59,7 @@ Chest radiography images distribution
 |  Type | Normal | Pneumonia | COVID-19 | Total |
 |:-----:|:------:|:---------:|:--------:|:-----:|
 | train |  7966  |    8514   |    234   | 16714 |
-|  test |   100  |     100   |    46    |   246 |
+|  test |   100  |     100   |     46   |   246 |
 
 
 ## Training and Evaluation
