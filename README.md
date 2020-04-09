@@ -25,7 +25,7 @@ The main requirements are listed below:
 
 * Tested with Tensorflow 1.13 and 1.15
 * OpenCV 4.2.0
-* Python 3.6
+* Python  >3.6
 * Numpy
 * OpenCV
 * Scikit-Learn
