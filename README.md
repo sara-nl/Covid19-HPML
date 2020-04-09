@@ -82,7 +82,6 @@ python -u train_keras.py \
 --model resnet50v2
 ```
 2. To train from an existing hdf5 file:
-​
 ```
 python -u train_keras.py \
 --trainfile train_COVIDx.txt \
@@ -96,16 +95,13 @@ python -u train_keras.py \
 --model resnet50v2 \
 --checkpoint /home/rubenh/Covid19-HPML/checkpoint/cp-512.hdf5
 ```
-​
-​
-​
-​
+
 ## Results
 These are the final results for COVID-Net with a ResNet50v2 backbone with img_size (512,512,3).   
-​
+
+
 ### COVIDNet ResNet50v2@(512)
-​
-​
+
 <div class="tg-wrap" align="center"><table class="tg">
   <tr>
     <th class="tg-7btt" colspan="3">Sensitivity (%)</th>
