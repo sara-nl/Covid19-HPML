@@ -10,11 +10,43 @@ OMP_NUM_THREADS=40 KERAS_BACKEND="tensorflow" python autoimage.py
 * mean : mean accuracy of candidates
 * runtime : total runtime of search
 
-## 512x512x3 | 8 classes
+## 512x512x3 | 3 classes | 280 examples / class
 
-Labels ```['cardiomegaly' 'consolidation' 'covid' 'lung lesion' 'lung opacity' 'pleural effusion' 'pneumonia' 'pneumothorax']```
+* Labels : ```['covid' 'no finding' 'pneumonia']```
 
-Overview:
+* Overview :
+```json
+{
+    "budget: 2": {
+        "configs": 15,
+        "incumbent": 0.6507936507936508,
+        "mean": 0.36506659734600916
+    },
+    "budget: 20": {
+        "configs": 0,
+        "incumbent": 0,
+        "mean": 0
+    },
+    "budget: 6": {
+        "configs": 0,
+        "incumbent": 0,
+        "mean": 0
+    },
+    "budget: 60": {
+        "configs": 0,
+        "incumbent": 0,
+        "mean": 0
+    },
+    "runtime": "0:04:50.056272"
+}
+```
+* Hardware : ```4 x Titan RTX | 24 cores``` 
+
+## 512x512x3 | 8 classes | 280 examples / class
+
+* Labels : ```['cardiomegaly' 'consolidation' 'covid' 'lung lesion' 'lung opacity' 'pleural effusion' 'pneumonia' 'pneumothorax']``` 
+
+* Overview:
 ```json
 {
     "budget: 2": {
@@ -23,9 +55,9 @@ Overview:
         "mean": 0.1622662800767377
     },
     "budget: 20": {
-        "configs": 1,
-        "incumbent": 0.35418876262626264,
-        "mean": 0.35418876262626264
+        "configs": 3,
+        "incumbent": 0.38356529833802566,
+        "mean": 0.33589658830969
     },
     "budget: 6": {
         "configs": 9,
@@ -33,19 +65,20 @@ Overview:
         "mean": 0.27914813625277646
     },
     "budget: 60": {
-        "configs": 0,
-        "incumbent": 0,
-        "mean": 0
+        "configs": 1,
+        "incumbent": 0.36960461413586415,
+        "mean": 0.36960461413586415
     },
-    "runtime": "0:45:25.516459"
+    "runtime": "1:08:25.610457"
 }
 ```
+* Hardware : ```4 x Titan RTX | 24 cores``` 
 
-## 512x512x3 | 2 classes
+## 512x512x3 | 2 classes | 280 examples / class
 
-Labels ```['covid' 'pneumonia']```
+* Labels : ```['covid' 'pneumonia']```
 
-Overview:
+* Overview:
 ```json
 {
     "budget: 2": {
@@ -71,12 +104,13 @@ Overview:
     "runtime": "0:33:06.625056"
 }
 ```
+* Hardware: ```4 x Titan RTX | 24 cores```
 
-## 512x512x3 | 15 classes
+## 512x512x3 | 15 classes | 180 examples / class
 
-Labels CheXpert + covid
+* Labels : CheXpert + covid
 
-Overview:
+* Overview:
 ```json
 {
     "budget: 2": {
@@ -102,3 +136,4 @@ Overview:
     "runtime": "14:39:23.872004"
 }
 ```
+* Hardware : ```2 x Titan RTX | 40 cores```

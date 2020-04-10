@@ -11,7 +11,7 @@ import sklearn.metrics
 from sklearn import preprocessing
 
 input_size = (512,512)
-classes = ["covid", "Pneumonia", "Cardiomegaly", "Consolidation", "Lung Lesion", "Lung Opacity", "Pleural Effusion", "Pneumothorax"]
+classes = ["covid", "Pneumonia", "No Finding"]
 
 def get_data_references(images = [] , labels = [] , filter = "_positive.txt", copy_to = "/tmp/covid_dataset", balance = 280, classes=classes): #TODO: add balanced/imbalanced and number of examples limit 
     '''
