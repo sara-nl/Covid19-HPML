@@ -49,3 +49,6 @@ Additional requirements to generate dataset:
 * PyDicom
 * Pandas
 * Jupyter
+
+## Results
+All results are obtained on [LISA](https://userinfo.surfsara.nl/systems/lisa/description)
