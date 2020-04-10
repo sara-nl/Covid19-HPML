@@ -13,9 +13,9 @@ from sklearn import preprocessing
 input_size = (512,512)
 classes = ["covid", "Pneumonia", "No Finding"]
 
-def get_data_references(images = [] , labels = [] , filter = "_positive.txt", copy_to = "/tmp/covid_dataset", balance = 280, classes=classes): #TODO: add balanced/imbalanced and number of examples limit 
+def get_data_references(images = [] , labels = [] , filter = "_positive.txt", copy_to = "/tmp/covid_dataset", balance = 280, classes=classes, img_channels = 3): #TODO: add balanced/imbalanced and number of examples limit 
     '''
-    If you don't  want to copy set copy_to = None
+    If you don't  want to copy set copy_to = None; only if this is set img_channels is taken into account 
     balance = 180 means each class gets 180 examples before splits
     '''
     for name in glob.glob("../data/*{}".format(filter)):
@@ -38,14 +38,18 @@ def get_data_references(images = [] , labels = [] , filter = "_positive.txt", co
         for i, im in enumerate(images):
             if "\n" in im:
                 im = im.strip()
-            with Image.open(im).convert("RGB") as image:
+            if img_channels == 3:
+                mode = "RGB"
+            else:
+                mode = "L"
+            with Image.open(im).convert(mode) as image:
                 image = image.resize(input_size)
                 im_arr = np.fromstring(image.tobytes(), dtype=np.uint8) / 255.0
             try:
-                im_arr = im_arr.reshape((image.size[1], image.size[0], 3))
+                im_arr = im_arr.reshape((image.size[1], image.size[0], img_channels))
             except ValueError as e:
                 im_arr = im_arr.reshape((image.size[1], image.size[0]))
-                im_arr = np.stack((im_arr,)*3, axis=-1)
+                im_arr = np.stack((im_arr,) * img_channels, axis=-1)
             finally:
                 dest = os.path.join(copy_to, "{0}.{1}".format(str(i), im.split("/")[-1].split(".")[-1]))
                 # copyfile(im, dest)
