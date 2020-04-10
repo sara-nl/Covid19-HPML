@@ -4,7 +4,7 @@ OMP_NUM_THREADS=40 KERAS_BACKEND="tensorflow" python autoimage.py
 ```
 
 # Results
-* budget : epoch budget
+* budget : no. of trained epochs
 * configs : no. of tested configs
 * incumbent : best accuracy candidate
 * mean : mean accuracy of candidates
@@ -18,26 +18,26 @@ OMP_NUM_THREADS=40 KERAS_BACKEND="tensorflow" python autoimage.py
 ```json
 {
     "budget: 2": {
-        "configs": 15,
+        "configs": 27,
         "incumbent": 0.6507936507936508,
-        "mean": 0.36506659734600916
+        "mean": 0.38236560870139297
     },
     "budget: 20": {
-        "configs": 0,
-        "incumbent": 0,
-        "mean": 0
+        "configs": 3,
+        "incumbent": 0.7380952380952381,
+        "mean": 0.7178547378547379
     },
     "budget: 6": {
-        "configs": 0,
-        "incumbent": 0,
-        "mean": 0
+        "configs": 9,
+        "incumbent": 0.7023809523809524,
+        "mean": 0.6190333955773519
     },
     "budget: 60": {
-        "configs": 0,
-        "incumbent": 0,
-        "mean": 0
+        "configs": 1,
+        "incumbent": 0.7738095238095237,
+        "mean": 0.7738095238095237
     },
-    "runtime": "0:04:50.056272"
+    "runtime": "0:41:32.444498"
 }
 ```
 * Hardware : ```4 x Titan RTX | 24 cores``` 
