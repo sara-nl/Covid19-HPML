@@ -83,59 +83,57 @@ OMP_NUM_THREADS=40 KERAS_BACKEND="tensorflow" python autoimage.py
 ```json
 {
     "budget: 2": {
-        "configs": 27,
-        "incumbent": 0.6507936507936508,
-        "mean": 0.38236560870139297
+        "configs": 270,
+        "incumbent": 0.6894047619047619,
+        "mean": 0.41307937796364036
     },
     "budget: 20": {
-        "configs": 12,
-        "incumbent": 0.7839934269162211,
-        "mean": 0.6226836002709164
+        "configs": 114,
+        "incumbent": 0.8521642899584077,
+        "mean": 0.6190683127011211
     },
     "budget: 6": {
-        "configs": 18,
-        "incumbent": 0.7023809523809524,
-        "mean": 0.5151001446915673
+        "configs": 180,
+        "incumbent": 0.7982407407407408,
+        "mean": 0.5589155599958713
     },
     "budget: 60": {
-        "configs": 6,
-        "incumbent": 0.8236607142857144,
-        "mean": 0.7407942217806607
+        "configs": 74,
+        "incumbent": 0.8573809523809522,
+        "mean": 0.6782328077251267
     },
-    "runtime": "1:44:42.050892"
+    "runtime": "21:26:03.565338"
 }
 ```
 
 * Incumbent configuration (60 epochs)
 ```json
 {
-    "CreateImageDataLoader:batch_size": 79,
+    "CreateImageDataLoader:batch_size": 36,
     "ImageAugmentation:augment": false,
-    "ImageAugmentation:cutout": true,
-    "ImageAugmentation:cutout_holes": 2,
-    "ImageAugmentation:length": 12,
+    "ImageAugmentation:cutout": false,
     "LossModuleSelectorIndices:loss_module": "cross_entropy",
     "NetworkSelectorDatasetInfo:network": "resnet",
-    "NetworkSelectorDatasetInfo:resnet:death_rate": 0.40932274789737766,
-    "NetworkSelectorDatasetInfo:resnet:initial_filters": 9,
+    "NetworkSelectorDatasetInfo:resnet:death_rate": 0.29907588933834206,
+    "NetworkSelectorDatasetInfo:resnet:initial_filters": 25,
     "NetworkSelectorDatasetInfo:resnet:nr_main_blocks": 4,
     "NetworkSelectorDatasetInfo:resnet:nr_residual_blocks_1": 4,
-    "NetworkSelectorDatasetInfo:resnet:nr_residual_blocks_2": 4,
-    "NetworkSelectorDatasetInfo:resnet:nr_residual_blocks_3": 1,
-    "NetworkSelectorDatasetInfo:resnet:nr_residual_blocks_4": 1,
-    "NetworkSelectorDatasetInfo:resnet:res_branches_1": 3,
-    "NetworkSelectorDatasetInfo:resnet:res_branches_2": 2,
-    "NetworkSelectorDatasetInfo:resnet:res_branches_3": 4,
-    "NetworkSelectorDatasetInfo:resnet:res_branches_4": 4,
-    "NetworkSelectorDatasetInfo:resnet:widen_factor_1": 1.9283381997819695,
-    "NetworkSelectorDatasetInfo:resnet:widen_factor_2": 1.1040627136183938,
-    "NetworkSelectorDatasetInfo:resnet:widen_factor_3": 1.0621990613095387,
-    "NetworkSelectorDatasetInfo:resnet:widen_factor_4": 2.0354817224769506,
-    "OptimizerSelector:adamw:learning_rate": 0.000260680394293892,
-    "OptimizerSelector:adamw:weight_decay": 0.09013749236092583,
+    "NetworkSelectorDatasetInfo:resnet:nr_residual_blocks_2": 1,
+    "NetworkSelectorDatasetInfo:resnet:nr_residual_blocks_3": 16,
+    "NetworkSelectorDatasetInfo:resnet:nr_residual_blocks_4": 2,
+    "NetworkSelectorDatasetInfo:resnet:res_branches_1": 2,
+    "NetworkSelectorDatasetInfo:resnet:res_branches_2": 1,
+    "NetworkSelectorDatasetInfo:resnet:res_branches_3": 3,
+    "NetworkSelectorDatasetInfo:resnet:res_branches_4": 3,
+    "NetworkSelectorDatasetInfo:resnet:widen_factor_1": 1.1376708364654908,
+    "NetworkSelectorDatasetInfo:resnet:widen_factor_2": 1.0112802837600807,
+    "NetworkSelectorDatasetInfo:resnet:widen_factor_3": 1.6696154297394128,
+    "NetworkSelectorDatasetInfo:resnet:widen_factor_4": 0.6016814670740366,
+    "OptimizerSelector:adamw:learning_rate": 0.0002891451382685464,
+    "OptimizerSelector:adamw:weight_decay": 0.021565533178938272,
     "OptimizerSelector:optimizer": "adamw",
-    "SimpleLearningrateSchedulerSelector:cosine_annealing:T_max": 24,
-    "SimpleLearningrateSchedulerSelector:cosine_annealing:T_mult": 1.9263380177442029,
+    "SimpleLearningrateSchedulerSelector:cosine_annealing:T_max": 8,
+    "SimpleLearningrateSchedulerSelector:cosine_annealing:T_mult": 1.4577153106471565,
     "SimpleLearningrateSchedulerSelector:lr_scheduler": "cosine_annealing",
     "SimpleTrainNode:batch_loss_computation_technique": "standard"
 }

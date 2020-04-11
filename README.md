@@ -20,6 +20,6 @@ Tags: *data collection*, *data sharing*, *HPC*, *community support*, *drug desig
 
 **Note: The COVID-Net models provided here are intended to be used as reference models that can be built upon and enhanced as new data becomes available. They are currently at a research stage and not yet intended as production-ready models (not meant for direct clinicial diagnosis), and we are working continuously to improve them as new data becomes available. Please do not use COVID-Net for self-diagnosis and seek help from your local health authorities.**
 
-## Results
+## Acknowledgement
 All results are obtained on the [user friendly](https://www.surf.nl/files/2019-03/lisa-compute-cluster.pdf) compute cluster, [LISA](https://userinfo.surfsara.nl/systems/lisa/description).
 
