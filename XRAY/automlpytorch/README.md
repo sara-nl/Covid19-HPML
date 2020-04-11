@@ -447,8 +447,6 @@ working_dir                         .                                 None      
 ----------------------------------------------------------------------------------------------------------------------------------------
 ```
 
-
-
 ## Autonet Search space configuration
 ```Python
 autoPyTorch.get_hyperparameter_search_space()
@@ -626,7 +624,6 @@ Configuration space object:
     SimpleLearningrateSchedulerSelector:step:step_size | SimpleLearningrateSchedulerSelector:lr_scheduler == 'step'
     SimpleTrainNode:mixup:alpha | SimpleTrainNode:batch_loss_computation_technique == 'mixup'
 ```
-
 
 ## Resulting Pytorch model
 ```Python
