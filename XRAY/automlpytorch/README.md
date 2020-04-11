@@ -41,6 +41,38 @@ OMP_NUM_THREADS=40 KERAS_BACKEND="tensorflow" python autoimage.py
 }
 ```
 
+* Incumbent configuration (60 epochs)
+```json
+{
+    "CreateImageDataLoader:batch_size": 10,
+    "ImageAugmentation:augment": false,
+    "ImageAugmentation:cutout": true,
+    "ImageAugmentation:cutout_holes": 2,
+    "ImageAugmentation:length": 12,
+    "LossModuleSelectorIndices:loss_module": "cross_entropy",
+    "NetworkSelectorDatasetInfo:darts:auxiliary": false,
+    "NetworkSelectorDatasetInfo:darts:drop_path_prob": 0.1,
+    "NetworkSelectorDatasetInfo:darts:init_channels": 36,
+    "NetworkSelectorDatasetInfo:darts:layers": 20,
+    "NetworkSelectorDatasetInfo:densenet:blocks": 4,
+    "NetworkSelectorDatasetInfo:densenet:growth_rate": 33,
+    "NetworkSelectorDatasetInfo:densenet:layer_in_block_1": 3,
+    "NetworkSelectorDatasetInfo:densenet:layer_in_block_2": 10,
+    "NetworkSelectorDatasetInfo:densenet:layer_in_block_3": 30,
+    "NetworkSelectorDatasetInfo:densenet:layer_in_block_4": 14,
+    "NetworkSelectorDatasetInfo:densenet:use_dropout": false,
+    "NetworkSelectorDatasetInfo:network": "densenet",
+    "OptimizerSelector:adam:learning_rate": 0.00016948104783605334,
+    "OptimizerSelector:adam:weight_decay": 0.06784769305666362,
+    "OptimizerSelector:optimizer": "adam",
+    "SimpleLearningrateSchedulerSelector:lr_scheduler": "step",
+    "SimpleLearningrateSchedulerSelector:step:gamma": 0.0021078766999122105,
+    "SimpleLearningrateSchedulerSelector:step:step_size": 13,
+    "SimpleTrainNode:batch_loss_computation_technique": "mixup",
+    "SimpleTrainNode:mixup:alpha": 0.2962837024692073
+}
+```
+
 * Hardware: ```4 x Titan RTX | 24 cores```
 
 ## 32x32x3 | 2 classes | 280 examples / class
