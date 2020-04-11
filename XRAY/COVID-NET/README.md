@@ -63,7 +63,7 @@ Chest radiography images distribution
 
 
 ## Training and Evaluation
-The network takes as input an image of shape (N, 512, 512, 3) and outputs the softmax probabilities as (N, 3), where N is the number of batches.
+The network can take as input an image of shape (N, 512, 512, 3) and outputs the softmax probabilities as (N, 3), where N is the batch size.
 
 
 ### Steps for training
