@@ -13,7 +13,7 @@ from sklearn import preprocessing
 input_size = (512,512)
 classes = ["covid", "Pneumonia", "No Finding"]
 
-def get_data_references(images = [] , labels = [] , filter = "_positive.txt", copy_to = "/tmp/covid_dataset", balance = 280, classes=classes, img_channels = 3): #TODO: add balanced/imbalanced and number of examples limit 
+def get_data_references(images = [] , labels = [] , filter = "_positive.txt", copy_to = "/tmp/covid_dataset", balance = 280, classes=classes, img_channels = 1): #TODO: add balanced/imbalanced and number of examples limit 
     '''
     If you don't  want to copy set copy_to = None; only if this is set img_channels is taken into account 
     balance = 180 means each class gets 180 examples before splits
@@ -40,7 +40,7 @@ def get_data_references(images = [] , labels = [] , filter = "_positive.txt", co
                 im = im.strip()
             if img_channels == 3:
                 mode = "RGB"
-            else:
+            elif img_channels == 1:
                 mode = "L"
             with Image.open(im).convert(mode) as image:
                 image = image.resize(input_size)
@@ -72,11 +72,12 @@ if __name__ == "__main__":
                                         budget_type='epochs',
                                         min_budget=1,
                                         max_budget=60,
-                                        num_iterations=100, #magical lipschitz value = 20 updates / stochastic process
+                                        num_iterations=1, #magical lipschitz value = 20 updates / stochastic process
                                         cuda=True)
     # search_space_updates = HyperparameterSearchSpaceUpdates()
     #fit
-    autoPyTorch.fit(images, labels, optimize_metric="balanced_accuracy", use_tensorboard_logger=True, loss_modules=['cross_entropy'], validation_split=0.1)
+    autoPyTorch.fit(images, labels, use_tensorboard_logger=True, validation_split=0.1)
+    # autoPyTorch.fit(images, labels, optimize_metric="balanced_accuracy", use_tensorboard_logger=True, loss_modules=['cross_entropy'], validation_split=0.1)
     # autoPyTorch.fit(images, labels, optimize_metric="accuracy", use_tensorboard_logger=True, networks=['resnet'], lr_scheduler=['cosine_annealing'], batch_loss_computation_techniques=['mixup'], loss_modules=['cross_entropy'], optimizer=['adamw'], validation_split=0.1)
     import ipdb; ipdb.set_trace()
     print(autoPyTorch)
