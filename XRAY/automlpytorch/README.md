@@ -10,6 +10,39 @@ OMP_NUM_THREADS=40 KERAS_BACKEND="tensorflow" python autoimage.py
 * mean : mean accuracy of candidates
 * runtime : total runtime of search
 
+## 256x256x3 | 3 classes | 280 examples / class
+
+* Labels : ```['covid' 'no finding' 'pneumonia']```
+
+* Overview :
+```json
+{
+    "budget: 2": {
+        "configs": 20,
+        "incumbent": 0.6549242424242424,
+        "mean": 0.4642412246318498
+    },
+    "budget: 20": {
+        "configs": 12,
+        "incumbent": 0.7359126984126985,
+        "mean": 0.6609446649029982
+    },
+    "budget: 6": {
+        "configs": 14,
+        "incumbent": 0.675,
+        "mean": 0.6073819847480563
+    },
+    "budget: 60": {
+        "configs": 2,
+        "incumbent": 0.7791666666666667,
+        "mean": 0.7273842592592592
+    },
+    "runtime": "2:42:38.478566"
+}
+```
+
+* Hardware: ```4 x Titan RTX | 24 cores```
+
 ## 32x32x3 | 2 classes | 280 examples / class
 
 * Labels : ```['covid' 'pneumonia']```
