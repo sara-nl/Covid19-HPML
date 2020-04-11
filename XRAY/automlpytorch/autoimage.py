@@ -10,10 +10,11 @@ import sklearn.model_selection
 import sklearn.metrics
 from sklearn import preprocessing
 
-input_size = (512,512)
+input_size = (256, 256)
+channels = 3
 classes = ["covid", "Pneumonia", "No Finding"]
 
-def get_data_references(images = [] , labels = [] , filter = "_positive.txt", copy_to = "/tmp/covid_dataset", balance = 280, classes=classes, img_channels = 1): #TODO: add balanced/imbalanced and number of examples limit 
+def get_data_references(images = [] , labels = [] , filter = "_positive.txt", copy_to = "/tmp/covid_dataset", balance = 280, classes=classes, img_channels = channels): #TODO: add balanced/imbalanced and number of examples limit 
     '''
     If you don't  want to copy set copy_to = None; only if this is set img_channels is taken into account 
     balance = 180 means each class gets 180 examples before splits
@@ -51,9 +52,11 @@ def get_data_references(images = [] , labels = [] , filter = "_positive.txt", co
                 im_arr = im_arr.reshape((image.size[1], image.size[0]))
                 im_arr = np.stack((im_arr,) * img_channels, axis=-1)
             finally:
+                im_arr = np.moveaxis(im_arr, -1, 0) #Pytorch is channelfirst
                 dest = os.path.join(copy_to, "{0}.{1}".format(str(i), im.split("/")[-1].split(".")[-1]))
                 # copyfile(im, dest)
                 image.save(dest) 
+                # print("Wrote image {} of shape {} with label {}({})".format(dest, im_arr.shape, labels[i], le.inverse_transform(labels)[i]))
             images[i] = dest
         print("Copy {} files".format(i+1))
     assert len(images) == len(labels)
@@ -63,22 +66,35 @@ def get_data_references(images = [] , labels = [] , filter = "_positive.txt", co
 if __name__ == "__main__":
     #Get the dataset (this could be yielded/batched)
     images, labels, le  = get_data_references()
+    search_space_updates = HyperparameterSearchSpaceUpdates()
+    search_space_updates.append(node_name="CreateImageDataLoader",
+                                hyperparameter="batch_size",
+                                value_range=[2, int(len(labels)/20)], #Lipschitz magical number
+                                log=False)
     autoPyTorch = AutoNetImageClassification(
-                                        # "tiny_cs",  # config 
-                                        # networks=["resnet"],
-                                        # torch_+num_threads=40,
-                                        min_workers=4, 
-                                        log_level='info',
-                                        budget_type='epochs',
+                                        "full_cs",
+                                        hyperparameter_search_space_updates=search_space_updates,
+                                        min_workers=2,
+                                        dataloader_worker=4,
+                                        global_results_dir="results",
+                                        keep_only_incumbent_checkpoints=True, 
+                                        log_level="info",
+                                        budget_type="epochs",
+                                        save_checkpoints=True,
+                                        result_logger_dir="logs",
                                         min_budget=1,
-                                        max_budget=60,
-                                        num_iterations=1, #magical lipschitz value = 20 updates / stochastic process
+                                        max_budget=20,
+                                        num_iterations=5, 
+                                        images_shape=[channels, input_size[0], input_size[1]],
                                         cuda=True)
-    # search_space_updates = HyperparameterSearchSpaceUpdates()
-    #fit
-    autoPyTorch.fit(images, labels, use_tensorboard_logger=True, validation_split=0.1)
+    #Fit
     # autoPyTorch.fit(images, labels, optimize_metric="balanced_accuracy", use_tensorboard_logger=True, loss_modules=['cross_entropy'], validation_split=0.1)
-    # autoPyTorch.fit(images, labels, optimize_metric="accuracy", use_tensorboard_logger=True, networks=['resnet'], lr_scheduler=['cosine_annealing'], batch_loss_computation_techniques=['mixup'], loss_modules=['cross_entropy'], optimizer=['adamw'], validation_split=0.1)
-    import ipdb; ipdb.set_trace()
-    print(autoPyTorch)
+    # autoPyTorch.fit(images, labels, optimize_metric="accuracy", use_tensorboard_logger=True, networks=['resnet'], lr_scheduler=['cosine_annealing'], batch_loss_computation_techniques=['mixup'], loss_modules=['cross_entropy'], validation_split=0.1)
+    autoPyTorch.fit(images, labels, optimize_metric="balanced_accuracy",  networks=['densenet', 'densenet_flexible', 'resnet', 'resnet152', 'darts'], use_tensorboard_logger=True, loss_modules=["cross_entropy"], validation_split=0.1)
+    #Print
+    print("autoPyTorch.get_autonet_config_file_parser().print_help()")
+    print(autoPyTorch.get_autonet_config_file_parser().print_help())
+    print("autoPyTorch.get_hyperparameter_search_space()")
+    print(autoPyTorch.get_hyperparameter_search_space())
+    print("autoPyTorch.get_pytorch_model()")
     print(autoPyTorch.get_pytorch_model())
