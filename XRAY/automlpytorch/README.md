@@ -33,11 +33,11 @@ OMP_NUM_THREADS=40 KERAS_BACKEND="tensorflow" python autoimage.py
         "mean": 0.6073819847480563
     },
     "budget: 60": {
-        "configs": 2,
+        "configs": 5,
         "incumbent": 0.7791666666666667,
-        "mean": 0.7273842592592592
+        "mean": 0.6748898982281336
     },
-    "runtime": "2:42:38.478566"
+    "runtime": "4:22:56.664665"
 }
 ```
 
