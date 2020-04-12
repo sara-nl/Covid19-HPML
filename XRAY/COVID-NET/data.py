@@ -12,7 +12,7 @@ from sklearn import preprocessing
 import glob
 from shutil import copyfile
 
-def get_data_references(images = [] , labels = [] , filter = "_positive.txt", copy_to = "/tmp/covid_dataset", balance = 180): #TODO: add balanced/imbalanced and number of examples limit 
+def get_data_references(images = [] , labels = [] , filter = "_positive.txt", copy_to = "/tmp/covid_dataset", balance = 180): #TODO: add balanced/imbalanced and number of examples limit
     '''
     If you don't  want to copy set copy_to = None
     balance = 180 means each class gets 180 examples before splits
@@ -29,7 +29,7 @@ def get_data_references(images = [] , labels = [] , filter = "_positive.txt", co
     labels = le.transform(labels)
     print("Found {} examples with labels {}".format(len(labels), le.classes_))
     #Copy data locally if needed
-    if copy_to: 
+    if copy_to:
         os.makedirs(copy_to, exist_ok=True)
         for i, im in enumerate(images):
             if "\n" in im:
@@ -43,27 +43,27 @@ def get_data_references(images = [] , labels = [] , filter = "_positive.txt", co
 
 class Metrics(tf.keras.callbacks.Callback):
     def __init__(self, validation_generator):
-        
+
         self.validation_generator = validation_generator
-    
-    
+
+
     def on_epoch_end(self, batch, logs={}):
         self.scores = {
             'recall_score': [],
             'precision_score': [],
             'f1_score': []
         }
-    
+
         for features, y_true in self.validation_generator:
             y_pred = np.asarray(self.model.predict(features))
-            y_pred = y_pred.round().astype(int) 
+            y_pred = y_pred.round().astype(int)
             self.scores['recall_score'].append(sklm.recall_score(y_true[:,0], y_pred[:,0]))
             self.scores['precision_score'].append(sklm.precision_score(y_true[:,0], y_pred[:,0]))
             self.scores['f1_score'].append(sklm.f1_score(y_true[:,0], y_pred[:,0]))
-        
+
         print(f" RC: {np.mean(self.scores['recall_score'])} PR: {np.mean(self.scores['precision_score'])} F1: {np.mean(self.scores['f1_score'])}")
         return
-    
+
 class BalanceDataGenerator(tf.keras.utils.Sequence):
     'Generates data for tf.keras'
     def __init__(self,
@@ -78,15 +78,15 @@ class BalanceDataGenerator(tf.keras.utils.Sequence):
                  augmentation=True,
                  datadir='data',
                  args=None):
-        
-        if self.args.datapipeline == 'chexpert':
+
+        if args.datapipeline == 'chexpert':
             'CHexPert Initialization'
             images, labels, le  = get_data_references()
             self.train_images = images[:int(len(images)*args.val_split)]
             self.train_labels = labels[:int(len(labels)*args.val_split)]
             if args.datapipeline == 'chexpert':
                 self.n_classes    = len(le.classes_)
-        
+
         'Initialization'
         self.datadir = datadir
         self.dataset = dataset
@@ -123,7 +123,7 @@ class BalanceDataGenerator(tf.keras.utils.Sequence):
         ]
         print(f"Train: NO-COVID={len(self.datasets[0])}, COVID={len(self.datasets[1])}")
         self.on_epoch_end()
-        
+
 
     def __len__(self):
         return int(np.ceil(len(self.datasets[0]) / float(self.batch_size)))
@@ -136,52 +136,52 @@ class BalanceDataGenerator(tf.keras.utils.Sequence):
 
     def __getitem__(self, idx):
         batch_x, batch_y = np.zeros((self.batch_size, *self.input_shape, self.num_channels)), np.zeros(self.batch_size)
-        
+
         # COVIDX Pipeline
         if self.args.datapipeline == 'covidx':
             batch_files = self.datasets[0][idx*self.batch_size : (idx+1)*self.batch_size]
             batch_files[np.random.randint(self.batch_size)] = np.random.choice(self.datasets[1])
-            
+
             for i in range(self.batch_size):
-    
+
                 sample = batch_files[i].split()
                 if self.is_training:
                     folder = 'train'
                 else:
                     folder = 'test'
-                
+
                 x = cv2.imread(os.path.join(self.datadir, folder, sample[1]))
                 x = cv2.resize(x, self.input_shape)
-    
-            
+
+
                 if self.is_training and hasattr(self, 'augmentation'):
                     x = self.augmentation.random_transform(x)
-    
+
                     x = x.astype('float32') / 255.0
                     y = self.mapping[sample[2]]
-            
+
                     batch_x[i] = x
                     batch_y[i] = y
-        
+
         # ChexPert Pipeline
         elif self.args.datapipeline == 'chexpert':
             batch_files_images = self.train_images[idx*self.batch_size : (idx+1)*self.batch_size]
             batch_files_labels = self.train_labels[idx*self.batch_size : (idx+1)*self.batch_size]
-            
+
             for i in range(self.batch_size):
                 x = cv2.imread(batch_files_images[i])
                 x = cv2.resize(x, self.input_shape)
-                
+
                 if self.is_training and hasattr(self, 'augmentation'):
                     x = self.augmentation.random_transform(x)
-    
+
                     x = x.astype('float32') / 255.0
                     y = batch_files_labels[i]
-            
+
                     batch_x[i] = x
                     batch_y[i] = y
-            
-                
+
+
         return batch_x, tf.keras.utils.to_categorical(batch_y, num_classes=self.n_classes)
 
 
@@ -213,7 +213,7 @@ class DataGenerator(tf.keras.utils.Sequence):
         for l in dataset:
             datasets[l.split()[-1]].append(l)
 
-            
+
         self.datasets = [
             datasets['normal'] + datasets['pneumonia'],
             datasets['COVID-19'],
@@ -239,15 +239,15 @@ class DataGenerator(tf.keras.utils.Sequence):
                 folder = 'test'
 
             x = cv2.imread(os.path.join(self.datadir, folder, sample[1]))
-            
+
             try:
                 x = cv2.resize(x, self.input_shape)
 
                 x = x.astype('float32') / 255.0
                 #y = int(sample[1])
-    
+
                 y = self.mapping[sample[2]]
-                
+
                 batch_x[i] = x
                 batch_y[i] = y
             except:
