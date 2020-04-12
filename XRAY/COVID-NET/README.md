@@ -163,5 +163,5 @@ These are the final results for COVID-Net with a ResNet50v2 backbone with img_si
 ## Pretrained Models
 |  Type | COVID-19 Sensitivity |                       Path                        |
 |:-----:|:--------------------:|:-------------------------------------------------:|
-|  hdf5 |         89.0         | `/home/rubenh/Covid19-HPML/checkpoint/cp-224.hdf5`|
-|  hdf5 |         93.5         | `/home/rubenh/Covid19-HPML/checkpoint/cp-512.hdf5`|
+|  hdf5 |         89.0         | `/home/rubenh/Covid19-HPML-static/checkpoint/cp-224.hdf5`|
+|  hdf5 |         93.5         | `/home/rubenh/Covid19-HPML-static/checkpoint/cp-512.hdf5`|
