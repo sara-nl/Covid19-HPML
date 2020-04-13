@@ -17,7 +17,7 @@ def get_data_references(images = [] , labels = [] , filter = "_positive.txt", co
     If you don't  want to copy set copy_to = None
     balance = 180 means each class gets 180 examples before splits
     '''
-    for name in glob.glob("../XRAY/*{}".format(filter)):
+    for name in glob.glob("../data/*{}".format(filter)):
         for i, imagepaths in enumerate(open(name).readlines()):
             if i==balance:
                 break
