@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="LISA">
+    <serverData>
+      <paths name="LISA">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/covid19_classification" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/venv" />
+            <excludedPath path="/covid19_classification/data" />
+            <excludedPath local="true" path="$PROJECT_DIR$/data" />
+            <excludedPath path="/covid19_classification/__pycache__" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
