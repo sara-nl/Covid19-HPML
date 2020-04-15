@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="c49a1eb0-fec2-48f4-9765-8a6a9888fb53" name="LISA">
+        <fileTransfer rootFolder="/home/jorism" accessType="SFTP" host="lisa.surfsara.nl" port="22" sshConfigId="edae6547-fdfa-49ff-b575-5265abaa00b9" sshConfig="jorism@lisa.surfsara.nl:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

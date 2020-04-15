@@ -36,7 +36,6 @@ def pep_x_module(inputs, block_id, filter_size=[64,64,128]):
 
 def covidnet(input_tensor=None, input_shape=(224, 224, 3), classes=3):
     """ Instantiates the covidnet architecture
-
     https://github.com/lindawangg/COVID-Net/blob/master/assets/COVID_Netv2.pdf
     
     """
@@ -161,6 +160,11 @@ def build_COVIDNet(num_classes=3, flatten=True, checkpoint='',args=None):
     if args.model == 'custom':
         base_model = covidnet(input_tensor=None, input_shape=(args.img_size, args.img_size, 3), classes=3)
         x = base_model.output
+        
+    if args.model == 'EfficientNet':
+        import efficientnet.tfkeras as efn
+        base_model = efn.EfficientNetB4(weights=None, include_top=True, input_shape=(args.img_size, args.img_size, 3), classes=3)
+        x = base_model.output
     
     
     if flatten:
@@ -178,7 +182,3 @@ def build_COVIDNet(num_classes=3, flatten=True, checkpoint='',args=None):
     if len(checkpoint):
         model.load_weights(checkpoint)
     return model
-
-
-
-

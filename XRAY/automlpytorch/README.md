@@ -10,7 +10,77 @@ OMP_NUM_THREADS=40 KERAS_BACKEND="tensorflow" python autoimage.py
 * mean : mean accuracy of candidates
 * runtime : total runtime of search
 
-## 512x512x3 | 2 classes | 280 examples / class
+## 256x256x3 | 3 classes | 280 examples / class
+
+* Labels : ```['covid' 'no finding' 'pneumonia']```
+
+* Overview :
+```json
+{
+    "budget: 2": {
+        "configs": 20,
+        "incumbent": 0.6549242424242424,
+        "mean": 0.4642412246318498
+    },
+    "budget: 20": {
+        "configs": 12,
+        "incumbent": 0.7359126984126985,
+        "mean": 0.6609446649029982
+    },
+    "budget: 6": {
+        "configs": 14,
+        "incumbent": 0.675,
+        "mean": 0.6073819847480563
+    },
+    "budget: 60": {
+        "configs": 5,
+        "incumbent": 0.7791666666666667,
+        "mean": 0.6748898982281336
+    },
+    "runtime": "4:22:56.664665"
+}
+```
+
+* Incumbent configuration (60 epochs) [1]
+```json
+[[1, 0, 8], 60.0, {"submitted": 1586639778.370423, "started": 1586639778.3705494, "finished": 1586640966.0534487}, {"loss": -0.7791666666666667, "info": {"train_loss": 0.7766528717229064, "train_balanced_accuracy": 0.6164189321010349, "val_balanced_accuracy": 0.7791666666666667, "epochs": 37, "model_parameters": 7706577, "learning_rate": 7.530287316575816e-10, "checkpoint": "3class_280balanced_ba_ce/checkpoints/checkpoint_(1, 0, 8)_Budget_60.pt", "train_datapoints": 717, "val_datapoints": 80}, "losses": -0.7791666666666667}, null]
+```
+
+* Incumbent configuration (60 epochs) [2]
+```json
+{
+    "CreateImageDataLoader:batch_size": 10,
+    "ImageAugmentation:augment": false,
+    "ImageAugmentation:cutout": true,
+    "ImageAugmentation:cutout_holes": 2,
+    "ImageAugmentation:length": 12,
+    "LossModuleSelectorIndices:loss_module": "cross_entropy",
+    "NetworkSelectorDatasetInfo:darts:auxiliary": false,
+    "NetworkSelectorDatasetInfo:darts:drop_path_prob": 0.1,
+    "NetworkSelectorDatasetInfo:darts:init_channels": 36,
+    "NetworkSelectorDatasetInfo:darts:layers": 20,
+    "NetworkSelectorDatasetInfo:densenet:blocks": 4,
+    "NetworkSelectorDatasetInfo:densenet:growth_rate": 33,
+    "NetworkSelectorDatasetInfo:densenet:layer_in_block_1": 3,
+    "NetworkSelectorDatasetInfo:densenet:layer_in_block_2": 10,
+    "NetworkSelectorDatasetInfo:densenet:layer_in_block_3": 30,
+    "NetworkSelectorDatasetInfo:densenet:layer_in_block_4": 14,
+    "NetworkSelectorDatasetInfo:densenet:use_dropout": false,
+    "NetworkSelectorDatasetInfo:network": "densenet",
+    "OptimizerSelector:adam:learning_rate": 0.00016948104783605334,
+    "OptimizerSelector:adam:weight_decay": 0.06784769305666362,
+    "OptimizerSelector:optimizer": "adam",
+    "SimpleLearningrateSchedulerSelector:lr_scheduler": "step",
+    "SimpleLearningrateSchedulerSelector:step:gamma": 0.0021078766999122105,
+    "SimpleLearningrateSchedulerSelector:step:step_size": 13,
+    "SimpleTrainNode:batch_loss_computation_technique": "mixup",
+    "SimpleTrainNode:mixup:alpha": 0.2962837024692073
+}
+```
+
+* Hardware: ```4 x Titan RTX | 24 cores```
+
+## 32x32x3 | 2 classes | 280 examples / class
 
 * Labels : ```['covid' 'pneumonia']```
 
@@ -75,7 +145,7 @@ OMP_NUM_THREADS=40 KERAS_BACKEND="tensorflow" python autoimage.py
 
 * Hardware: ```4 x Titan RTX | 24 cores```
 
-## 512x512x3 | 3 classes | 280 examples / class
+## 32x32x3 | 3 classes | 280 examples / class
 
 * Labels : ```['covid' 'no finding' 'pneumonia']```
 
@@ -141,7 +211,7 @@ OMP_NUM_THREADS=40 KERAS_BACKEND="tensorflow" python autoimage.py
 
 * Hardware : ```4 x Titan RTX | 24 cores``` 
 
-## 512x512x3 | 8 classes | 280 examples / class
+## 32x32x3 | 8 classes | 280 examples / class
 
 * Labels : ```['cardiomegaly' 'consolidation' 'covid' 'lung lesion' 'lung opacity' 'pleural effusion' 'pneumonia' 'pneumothorax']``` 
 
@@ -205,7 +275,7 @@ OMP_NUM_THREADS=40 KERAS_BACKEND="tensorflow" python autoimage.py
 * Hardware : ```4 x Titan RTX | 24 cores``` 
 
 
-## 512x512x3 | 15 classes | 180 examples / class
+## 32x32x3 | 15 classes | 180 examples / class
 
 * Labels : CheXpert + covid
 
@@ -445,172 +515,7 @@ validation_split                    0.0                               [0,       
 ----------------------------------------------------------------------------------------------------------------------------------------
 working_dir                         .                                 None                     directory                                
 ----------------------------------------------------------------------------------------------------------------------------------------
-15:19:27 Using selector: EpollSelector
-ipdb> autoPyTorch.get_autonet_config_file_parser().print_help()                                                                                                                                             
-name                                default                           choices                  type                                     
-========================================================================================================================================
-additional_logs                     []                                []                       <class 'str'>                            
-----------------------------------------------------------------------------------------------------------------------------------------
-additional_metrics                  []                                [accuracy,               <class 'str'>                            
-                                                                       auc_metric,                                                      
-                                                                       pac_metric,                                                      
-                                                                       balanced_accuracy,                                               
-                                                                       cross_entropy]                                                   
-----------------------------------------------------------------------------------------------------------------------------------------
-algorithm                           bohb                              [bohb,                   <class 'str'>                            
-                                                                       hyperband]                                                       
-----------------------------------------------------------------------------------------------------------------------------------------
-batch_loss_computation_techniques   [standard,                        [standard,               <class 'str'>                            
-                                     mixup]                            mixup]                                                           
-----------------------------------------------------------------------------------------------------------------------------------------
-budget_type                         time                              [time,                   <class 'str'>                            
-                                                                       epochs]                                                          
-----------------------------------------------------------------------------------------------------------------------------------------
-cuda                                True                              [True,                   <function to_bool at 0x2b0e481ca730>     
-                                                                       False]                                                           
-----------------------------------------------------------------------------------------------------------------------------------------
-cv_splits                           1                                 None                     <class 'int'>                            
-----------------------------------------------------------------------------------------------------------------------------------------
-dataloader_cache_size_mb            0                                 None                     <class 'int'>                            
-----------------------------------------------------------------------------------------------------------------------------------------
-dataloader_worker                   1                                 None                     <class 'int'>                            
-----------------------------------------------------------------------------------------------------------------------------------------
-dataset_order                       None                              None                     <class 'int'>                            
-	info: Only used for multiple datasets.
-----------------------------------------------------------------------------------------------------------------------------------------
-default_dataset_download_dir        /home/damian/COVID/Auto-PyTorch   None                     directory                                
-	info: Directory default datasets will be downloaded to.
-----------------------------------------------------------------------------------------------------------------------------------------
-eta                                 3                                 None                     <class 'float'>                          
-	info: eta parameter of Hyperband.
-----------------------------------------------------------------------------------------------------------------------------------------
-evaluate_on_train_data              True                              None                     <function to_bool at 0x2b0e481ca730>     
-----------------------------------------------------------------------------------------------------------------------------------------
-file_extensions                     [.png,                            None                     <class 'str'>                            
-                                     .jpg,                                                                                              
-                                     .JPEG,                                                                                             
-                                     .pgm]                                                                                              
-----------------------------------------------------------------------------------------------------------------------------------------
-final_activation                    softmax                           [softmax]                <class 'str'>                            
-----------------------------------------------------------------------------------------------------------------------------------------
-global_results_dir                  None                              None                     directory                                
-----------------------------------------------------------------------------------------------------------------------------------------
-half_num_cv_splits_below_budget     0                                 None                     <class 'float'>                          
-----------------------------------------------------------------------------------------------------------------------------------------
-hyperparameter_search_space_updates None                              None                     [directory,                              
-                                                                                                <function parse_hyperparameter_search_] 
-	info: object of type HyperparameterSearchSpaceUpdates
-----------------------------------------------------------------------------------------------------------------------------------------
-images_root_folders                 [/home/damian/COVID/Auto-PyTorch] None                     directory                                
-	info: Directory relative to which image paths are given.
-----------------------------------------------------------------------------------------------------------------------------------------
-images_shape                        [3,                               None                     <class 'int'>                            
-                                     32,                                                                                                
-                                     32]                                                                                                
-	info: Image size input to the networks, images will be rescaled to this.
-----------------------------------------------------------------------------------------------------------------------------------------
-increase_number_of_trained_datasets False                             None                     <function to_bool at 0x2b0e481ca730>     
-	info: Only used for multiple datasets.
-----------------------------------------------------------------------------------------------------------------------------------------
-keep_only_incumbent_checkpoints     True                              None                     <function to_bool at 0x2b0e481ca730>     
-----------------------------------------------------------------------------------------------------------------------------------------
-log_level                           warning                           [debug,                  <class 'str'>                            
-                                                                       info,                                                            
-                                                                       warning,                                                         
-                                                                       error,                                                           
-                                                                       critical]                                                        
-----------------------------------------------------------------------------------------------------------------------------------------
-loss_modules                        [cross_entropy,                   [cross_entropy,          <class 'str'>                            
-                                     cross_entropy_weighted]           cross_entropy_weighted]                                          
-----------------------------------------------------------------------------------------------------------------------------------------
-lr_scheduler                        [cosine_annealing,                [cosine_annealing,       <class 'str'>                            
-                                     cyclic,                           cyclic,                                                          
-                                     step,                             step,                                                            
-                                     adapt,                            adapt,                                                           
-                                     plateau,                          plateau,                                                         
-                                     alternating_cosine,               alternating_cosine,                                              
-                                     exponential,                      exponential,                                                     
-                                     none]                             none]                                                            
-----------------------------------------------------------------------------------------------------------------------------------------
-max_budget                          6000                              None                     <class 'float'>                          
-	info: Max budget for fitting configurations.
-----------------------------------------------------------------------------------------------------------------------------------------
-max_class_size                      None                              None                     <class 'int'>                            
-----------------------------------------------------------------------------------------------------------------------------------------
-max_runtime                         24000                             None                     <class 'float'>                          
-	info: Total time for the run.
-----------------------------------------------------------------------------------------------------------------------------------------
-memory_limit_mb                     1000000                           None                     <class 'int'>                            
-----------------------------------------------------------------------------------------------------------------------------------------
-min_budget                          120                               None                     <class 'float'>                          
-	info: Min budget for fitting configurations.
-----------------------------------------------------------------------------------------------------------------------------------------
-min_budget_for_cv                   0                                 None                     <class 'float'>                          
-----------------------------------------------------------------------------------------------------------------------------------------
-min_workers                         1                                 None                     <class 'int'>                            
-----------------------------------------------------------------------------------------------------------------------------------------
-minimize                            False                             [True,                   <function to_bool at 0x2b0e481ca730>     
-                                                                       False]                                                           
-----------------------------------------------------------------------------------------------------------------------------------------
-network_interface_name              admin                             None                     <class 'str'>                            
-----------------------------------------------------------------------------------------------------------------------------------------
-networks                            [densenet,                        [densenet,               <class 'str'>                            
-                                     densenet_flexible,                densenet_flexible,                                               
-                                     resnet,                           resnet,                                                          
-                                     resnet152,                        resnet152,                                                       
-                                     darts,                            darts,                                                           
-                                     mobilenet]                        mobilenet]                                                       
-----------------------------------------------------------------------------------------------------------------------------------------
-num_iterations                      inf                               None                     <class 'float'>                          
-	info: Number of successive halving iterations
-----------------------------------------------------------------------------------------------------------------------------------------
-optimize_metric                     accuracy                          [accuracy,               <class 'str'>                            
-                                                                       auc_metric,                                                      
-                                                                       pac_metric,                                                      
-                                                                       balanced_accuracy,                                               
-                                                                       cross_entropy]                                                   
-	info: This is the meta train metric BOHB will try to optimize.
-----------------------------------------------------------------------------------------------------------------------------------------
-optimizer                           [adam,                            [adam,                   <class 'str'>                            
-                                     adamw,                            adamw,                                                           
-                                     sgd,                              sgd,                                                             
-                                     rmsprop]                          rmsprop]                                                         
-----------------------------------------------------------------------------------------------------------------------------------------
-random_seed                         991183599                         None                     <class 'int'>                            
-	info: Make sure to specify the same seed for all workers.
-----------------------------------------------------------------------------------------------------------------------------------------
-result_logger_dir                   .                                 None                     directory                                
-----------------------------------------------------------------------------------------------------------------------------------------
-run_id                              0                                 None                     <class 'str'>                            
-	info: Unique id for each run.
-----------------------------------------------------------------------------------------------------------------------------------------
-save_checkpoints                    False                             [True,                   <function to_bool at 0x2b0e481ca730>     
-                                                                       False]                                                           
-	info: Wether to save state dicts as checkpoints.
-----------------------------------------------------------------------------------------------------------------------------------------
-shuffle                             True                              [True,                   <function to_bool at 0x2b0e481ca730>     
-                                                                       False]                                                           
-----------------------------------------------------------------------------------------------------------------------------------------
-task_id                             -1                                None                     <class 'int'>                            
-	info: ID for each worker, if you run AutoNet on a cluster. Set to -1, if you run it locally. 
-----------------------------------------------------------------------------------------------------------------------------------------
-tensorboard_images_count            0                                 None                     <class 'int'>                            
-----------------------------------------------------------------------------------------------------------------------------------------
-tensorboard_min_log_interval        30                                None                     <class 'int'>                            
-----------------------------------------------------------------------------------------------------------------------------------------
-use_stratified_cv_split             True                              [True,                   <function to_bool at 0x2b0e481ca730>     
-                                                                       False]                                                           
-----------------------------------------------------------------------------------------------------------------------------------------
-use_tensorboard_logger              False                             None                     <function to_bool at 0x2b0e481ca730>     
-----------------------------------------------------------------------------------------------------------------------------------------
-validation_split                    0.0                               [0,                      <class 'float'>                          
-                                                                       1]                                                               
-----------------------------------------------------------------------------------------------------------------------------------------
-working_dir                         .                                 None                     directory                                
-----------------------------------------------------------------------------------------------------------------------------------------
 ```
-
-
 
 ## Autonet Search space configuration
 ```Python
@@ -789,7 +694,6 @@ Configuration space object:
     SimpleLearningrateSchedulerSelector:step:step_size | SimpleLearningrateSchedulerSelector:lr_scheduler == 'step'
     SimpleTrainNode:mixup:alpha | SimpleTrainNode:batch_loss_computation_technique == 'mixup'
 ```
-
 
 ## Resulting Pytorch model
 ```Python
