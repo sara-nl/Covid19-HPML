@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import ReduceLROnPlateau
+from tensorflow.keras.utils import multi_gpu_model
 import tensorflow.keras
 from model import build_COVIDNet
 import pdb
@@ -9,10 +10,15 @@ import numpy as np
 import os, pathlib, argparse
 import cv2
 from sklearn.metrics import confusion_matrix
+from sklearn.utils import shuffle
 from data import DataGenerator, BalanceDataGenerator, Metrics
 from pprint import pprint
+from sklearn import preprocessing
+import glob
+from shutil import copyfile
+import collections
 
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'  # which gpu to train on
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3'  # which gpu(s) to train on
 
 # TO-DO: add argparse when converting to script
 parser = argparse.ArgumentParser(description='COVID-Net Training')
@@ -22,6 +28,7 @@ parser.add_argument('--data_path', default='data', type=str, help='Path to data 
 parser.add_argument('--lr', default=0.00002, type=float, help='Learning rate')
 parser.add_argument('--img_size', type=int, default=512, help='Image size to use')
 parser.add_argument('--bs', default=8, type=int, help='Batch size')
+parser.add_argument('--regularizer', action='store_true')
 parser.add_argument('--epochs', default=10, type=int, help='Number of epochs')
 parser.add_argument('--name', default='COVIDNet', type=str, help='Name of training folder')
 parser.add_argument('--checkpoint', default='', type=str, help='Start training from existing weights')
@@ -33,7 +40,24 @@ args = parser.parse_args()
 pprint(vars(args))
 
 mapping = {'normal': 0, 'pneumonia': 1, 'COVID-19': 2}
-class_weight = {0: 1., 1: 1., 2: 25.}
+if args.datapipeline =='chexpert':
+    class_weight = {0: 1.0,
+                    1: 1.0,
+                    2: 1.0,
+                    3: 1.0,
+                    4: 1.0,
+                    5: 1.0,
+                    6: 1.0,
+                    7: 1.0,
+                    8: 1.0,
+                    9: 1.0,
+                    10: 1.0,
+                    11: 1.0,
+                    12: 1.0,
+                    13: 1.0,
+                    14: 1.0}
+elif args.datapipeline =='covidx':
+    class_weight = {0: 1., 1: 1., 2: 25.}
 num_classes = 3
 batch_size = args.bs
 epochs = args.epochs
@@ -50,8 +74,83 @@ trainfiles = file.readlines()
 file = open(args.testfile, 'r')
 testfiles = file.readlines()
 
-train_generator = BalanceDataGenerator(trainfiles, input_shape=(args.img_size,args.img_size), datadir=args.data_path, is_training=True,args=args)
-test_generator = DataGenerator(testfiles, input_shape=(args.img_size,args.img_size), datadir=args.data_path, is_training=False)
+
+
+
+def get_data_references(images = [] , labels = [] , filter = "_positive.txt", copy_to = "/tmp/covid_dataset", balance = 180): #TODO: add balanced/imbalanced and number of examples limit 
+    '''
+    If you don't  want to copy set copy_to = None
+    balance = 180 means each class gets 180 examples before splits
+    '''
+    for name in glob.glob("../data/*{}".format(filter)):
+        for i, imagepaths in enumerate(open(name).readlines()):
+            if i==balance:
+                break
+            images.append(imagepaths)
+            labels.append(name.split(filter)[0])
+    le = preprocessing.LabelEncoder()
+    le.fit(list(set(labels)))
+    #Create sklearn type labels
+    labels = le.transform(labels)
+    print("Found {} examples with labels {}".format(len(labels), le.classes_))
+    #Copy data locally if needed
+    if copy_to: 
+        os.makedirs(copy_to, exist_ok=True)
+        for i, im in enumerate(images):
+            if "\n" in im:
+                im = im.strip()
+            dest = os.path.join(copy_to, f"{le.classes_[labels[i]].split('/')[-1]}-{str(i)}.{im.split('/')[-1].split('.')[-1]}")
+            if not os.path.exists(dest):
+                copyfile(im, dest)
+            images[i] = dest
+        print("Copy {} files".format(i+1))
+    assert len(images) == len(labels)
+    return images, labels, le
+
+if args.datapipeline == 'chexpert':
+    images, labels, le  = get_data_references()
+    images, labels      = shuffle(images,random_state=0), shuffle(labels,random_state=0)
+    
+    train_images = images[:int(len(images)*(1-args.val_split))]
+    train_labels = labels[:int(len(labels)*(1-args.val_split))]
+
+    valid_images = images[int(len(images)*(1-args.val_split)):]
+    valid_labels = labels[int(len(labels)*(1-args.val_split)):]
+    
+    tcounter=collections.Counter([x.split('-')[-2] for x in train_images])
+    vcounter=collections.Counter([x.split('-')[-2] for x in valid_images])
+    print("Train Images:\n"), pprint(tcounter), print("Valid Images:\n"), pprint(vcounter)
+
+    
+    train_generator = BalanceDataGenerator(trainfiles,
+                                           images = train_images,
+                                           labels = train_labels,
+                                           le = le,
+                                           input_shape=(args.img_size,args.img_size),
+                                           datadir=args.data_path,
+                                           is_training=True,
+                                           args=args)
+    test_generator = DataGenerator(testfiles,
+                                   images = valid_images,
+                                   labels = valid_labels,
+                                   le = le,
+                                   input_shape=(args.img_size,args.img_size),
+                                   datadir=args.data_path,
+                                   is_training=False,
+                                   args=args)
+
+
+elif args.datapipeline == 'covidx':
+    train_generator = BalanceDataGenerator(trainfiles,
+                                           input_shape=(args.img_size,args.img_size),
+                                           datadir=args.data_path,
+                                           is_training=True,
+                                           args=args)
+    test_generator = DataGenerator(testfiles,
+                                   input_shape=(args.img_size,args.img_size),
+                                   datadir=args.data_path,
+                                   is_training=False,
+                                   args=args)
 
 
 def get_callbacks(runPath):
@@ -79,23 +178,42 @@ def get_callbacks(runPath):
 
     return callbacks
 
-model = build_COVIDNet(checkpoint=args.checkpoint,args=args)
 
+model = build_COVIDNet(checkpoint=args.checkpoint,args=args,num_classes=train_generator.n_classes)
+
+if args.regularizer:
+    # Setting L2 regularization
+    for layer in model.layers:
+        if hasattr(layer,'kernel_regularizer'):
+            layer.kernel_regularizer = tf.keras.regularizers.l2(l=1e-3)
+            print("      Reg: ",layer.kernel_regularizer )
+        
 opt = Adam(learning_rate=lr, amsgrad=True)
 callbacks = get_callbacks(runPath)
-model.compile(loss='categorical_crossentropy',
+
+paramodel= multi_gpu_model(model, gpus=4)
+paramodel.compile(loss='categorical_crossentropy',
               optimizer=opt,
               metrics=['accuracy']) # TO-DO: add additional metrics for COVID-19
+
+paramodel.summary()
 print('Ready for training!')
 
-model.fit_generator(train_generator, 
+paramodel.fit_generator(train_generator, 
                     callbacks=callbacks, 
                     validation_data=test_generator, 
                     epochs=epochs, 
-                    shuffle=True, 
+                    shuffle=False, 
                     class_weight=class_weight, 
-                    use_multiprocessing=True,
-                    steps_per_epoch=4)
+                    use_multiprocessing=False)
+
+# model.fit(train_generator, 
+#                     callbacks=callbacks, 
+#                     validation_data=test_generator, 
+#                     epochs=epochs, 
+#                     shuffle=True, 
+#                     class_weight=class_weight, 
+#                     use_multiprocessing=False)
 
 y_test = []
 pred = []

@@ -6,8 +6,9 @@ import pdb
 import sys
 import tensorflow as tf
 from tensorflow.keras.applications.resnet_v2 import ResNet50V2
+from tensorflow.keras.applications.mobilenet_v2 import MobileNetV2
 from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Input, Flatten, Activation
+from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Input, Flatten, Activation, Dropout,GlobalMaxPool2D
 from tensorflow.keras.layers import BatchNormalization
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.layers import DepthwiseConv2D
@@ -153,6 +154,10 @@ def build_COVIDNet(num_classes=3, flatten=True, checkpoint='',args=None):
         base_model = ResNet50V2(include_top=False, weights='imagenet', input_shape=(args.img_size, args.img_size, 3))
         x = base_model.output
     
+    if args.model =='mobilenetv2':
+        base_model = MobileNetV2(include_top=False, weights='imagenet', input_shape=(args.img_size, args.img_size, 3))
+        x = base_model.output
+    
     if args.model == 'custom':
         base_model = covidnet(input_tensor=None, input_shape=(args.img_size, args.img_size, 3), classes=3)
         x = base_model.output
@@ -161,10 +166,14 @@ def build_COVIDNet(num_classes=3, flatten=True, checkpoint='',args=None):
     if flatten:
         x = Flatten()(x)
     else:
-        x = GlobalAveragePooling2D()(x)
-    x = Dense(1024, activation='relu')(x)
-    x = Dense(256, activation='relu')(x)
-    predictions = Dense(num_classes, activation='softmax')(x)
+        # x = GlobalAveragePooling2D()(x)
+        x = GlobalMaxPool2D()(x)
+    
+    if args.datapipeline == 'covidx':
+        x = Dense(1024, activation='relu',kernel_regularizer=tf.keras.regularizers.l2(0.0001))(x)
+    x = Dense(256, activation='relu',kernel_regularizer=tf.keras.regularizers.l2(0.0001))(x)
+    # x = Dropout(0.2)(x)
+    predictions = Dense(num_classes, activation='softmax',name=f'FC_{num_classes}')(x)
     model = Model(inputs=base_model.input, outputs=predictions)
     if len(checkpoint):
         model.load_weights(checkpoint)
