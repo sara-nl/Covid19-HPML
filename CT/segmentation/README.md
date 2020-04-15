@@ -32,7 +32,15 @@ Check *options.py* for other command line options.
 
 ## Results
 In order to produce the results, all models get the same data to train on. The batch size (8) is also constant, as in the learning rate (1e-5). No learning rate scheduler was used. All models were trained for 1500 epochs. 
-
+| Model                  | Validation mIoU | Validation accuracy |
+|------------------------|-----------------|---------------------|
+| UNet                   | 0.7127          | 0.9726              |
+| Deeplab v3+ resnet 101 | 0.7005          | 0.9692              |
+| Deeplab v3+ xception   | 0.7069          | 0.9706              |
+| FCN resnet 50          | 0.7200          | 0.9718              |
+| FCN resnet 101         | 0.7172          | 0.9718              |
+| Deeplab resnet 50      | 0.7173          | 0.9722              |
+| Deeplab resnet 101     | 0.7155          | 0.9723              |
 
 
 

@@ -5,10 +5,13 @@
 *jpg*
 *png*
 *jpeg*
+*json
+*nl
 *out*
 *tb-logs*
 *checkpoint*
 *output*
+*venv*
 *assets*
 *rsna-pneumonia-detection-challenge*
 
