@@ -97,7 +97,7 @@ python -u train_keras.py \
 ```
 
 ## Results
-These are the final results for COVID-Net with a ResNet50v2 backbone with img_size (512,512,3) trained for 5 epochs.  
+These are the final results for COVID-Net with a ResNet50v2, EfficientNetB4 backbone with img_size (512,512,3) trained for 5 epochs.  
 
 
 ### COVIDNet ResNet50v2@(512)
@@ -221,5 +221,6 @@ These are the final results for COVID-Net with a ResNet50v2 backbone with img_si
 ## Pretrained Models
 |  Type | COVID-19 Sensitivity |                       Path                        |
 |:-----:|:--------------------:|:-------------------------------------------------:|
-|  hdf5 |         89.0         | `/home/rubenh/Covid19-HPML-static/checkpoint/cp-224.hdf5`|
-|  hdf5 |         93.5         | `/home/rubenh/Covid19-HPML-static/checkpoint/cp-512.hdf5`|
+|  hdf5 |         89.0         | `/home/rubenh/Covid19-HPML-static/checkpoint/cp-224-resnet50v2.hdf5`|
+|  hdf5 |         93.5         | `/home/rubenh/Covid19-HPML-static/checkpoint/cp-512-resnet50v2.hdf5`|
+|  hdf5 |        100.0         | `/home/rubenh/Covid19-HPML-static/checkpoint/cp-512-efficientnet.hdf5`|
