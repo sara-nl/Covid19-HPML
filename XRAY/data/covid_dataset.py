@@ -11,12 +11,21 @@ with open("covid_index.txt") as f:
     content = f.readlines()
 
 
-covid_data = []
-for idx, i in enumerate(content):
-    if "COVID-19" in i.split()[-1]:
-        for s in i.split():
-            if any(ext in s for ext in [".jpeg", ".jpg", ".png"]):
-                covid_data.append(s)
+def filter_content(content, filter):
+    response = []
+    for idx, i in enumerate(content):
+        print(i.split()[-1].lower())
+        if filter.lower() in i.split()[-1].lower():
+            for s in i.split():
+                if any(ext in s for ext in [".jpeg", ".jpg", ".png"]):
+                    response.append(s)
+    return response
+
+covid_data = filter_content(content, "COVID-19")
+normal_data = filter_content(content, "normal")
+print(len(normal_data))
+pneumonia_data = filter_content(content, "pneumonia")
+print(len(pneumonia_data))
 
 covidx_paths = ["/nfs/managed_datasets/COVID19/XRAY/covidx_dataset/raw_data/train", "/nfs/managed_datasets/COVID19/XRAY/covidx_dataset/raw_data/test"]
 counter = 0
@@ -28,6 +37,22 @@ for image in covid_data:
         if os.path.isfile(ft):
             covid_positive.append(ft)
 print("Covid positive examples", len(covid_positive))
+
+normal = []
+for image in normal_data:
+    for pat in covidx_paths:
+        ft = os.path.join(pat, image)
+        if os.path.isfile(ft):
+            normal.append(ft)
+print("Normal examples", len(normal))
+
+pneumonia = []
+for image in pneumonia_data:
+    for pat in covidx_paths:
+        ft = os.path.join(pat, image)
+        if os.path.isfile(ft):
+            pneumonia.append(ft)
+print("Pneumonia positive examples", len(pneumonia))
 
 usf_paths = ["/nfs/managed_datasets/COVID19/XRAY/usf_dataset/train2/covid", "/nfs/managed_datasets/COVID19/XRAY/usf_dataset/validation2/covid"]
 for pat in usf_paths:
@@ -52,6 +77,15 @@ names = df.columns.values[5:]
 print("Loading {1} pathologies from Chexpert: {0}".format(names, len(names)))
 print("Selecting only Frontal views")
 
+
+with open("{}_positive.txt".format("Pneumonia"), "a", newline='\n') as fp:
+    for item in pneumonia:
+        fp.write("%s\n" % item)
+with open("{}_positive.txt".format("No Finding"), "a", newline='\n') as fp:
+    for item in normal:
+        fp.write("%s\n" % item)
+
+
 counter = 0
 for i, row in df.iterrows():
     if row[3] == "Frontal":
@@ -63,6 +97,8 @@ for i, row in df.iterrows():
                 fp.write(os.path.join(chexpertpath, *row['Path'].split("/")[1:]))
                 fp.write('\n')
 print("Wrote {} examples in total".format(counter))
+
+
 
 import glob
 for name in glob.glob("*_positive.txt"):
