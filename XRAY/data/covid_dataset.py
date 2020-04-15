@@ -14,7 +14,6 @@ with open("covid_index.txt") as f:
 def filter_content(content, filter):
     response = []
     for idx, i in enumerate(content):
-        print(i.split()[-1].lower())
         if filter.lower() in i.split()[-1].lower():
             for s in i.split():
                 if any(ext in s for ext in [".jpeg", ".jpg", ".png"]):
