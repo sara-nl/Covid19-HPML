@@ -97,7 +97,7 @@ python -u train_keras.py \
 ```
 
 ## Results
-These are the final results for COVID-Net with a ResNet50v2 backbone with img_size (512,512,3) trained for 5 epochs.  
+These are the final results for COVID-Net with a ResNet50v2, EfficientNetB4 backbone with img_size (512,512,3) trained for 5 epochs.  
 
 
 ### COVIDNet ResNet50v2@(512)
@@ -151,6 +151,56 @@ These are the final results for COVID-Net with a ResNet50v2 backbone with img_si
   </tr>
 </table></div>
 
+### COVIDNet EfficientNetB4@(512)
+
+<div class="tg-wrap" align="center"><table class="tg">
+  <tr>
+    <th class="tg-7btt" colspan="3">Sensitivity (%)</th>
+  </tr>
+  <tr>
+    <td class="tg-7btt">Normal</td>
+    <td class="tg-7btt">Pneumonia</td>
+    <td class="tg-7btt">COVID-19</td>
+  </tr>
+  <tr>
+    <td class="tg-c3ow">85.0</td>
+    <td class="tg-c3ow">91.0</td>
+    <td class="tg-c3ow">100.0</td>
+  </tr>
+</table></div>
+
+
+<div class="tg-wrap"><table class="tg">
+  <tr>
+    <th class="tg-7btt" colspan="3">Positive Predictive Value (%)</th>
+  </tr>
+  <tr>
+    <td class="tg-7btt">Normal</td>
+    <td class="tg-7btt">Pneumonia</td>
+    <td class="tg-7btt">COVID-19</td>
+  </tr>
+  <tr>
+    <td class="tg-c3ow">94.4</td>
+    <td class="tg-c3ow">85.8</td>
+    <td class="tg-c3ow">92.0</td>
+  </tr>
+</table></div>
+
+<div class="tg-wrap"><table class="tg">
+  <tr>
+    <th class="tg-7btt" colspan="3">Metrics (Macro - average %)</th>
+  </tr>
+  <tr>
+    <td class="tg-7btt">Recall</td>
+    <td class="tg-7btt">Precision</td>
+    <td class="tg-7btt">F1 - Score</td>
+  </tr>
+  <tr>
+    <td class="tg-c3ow">94.2</td>
+    <td class="tg-c3ow">90.5</td>
+    <td class="tg-c3ow">91.7</td>
+  </tr>
+</table></div>
 
 ## Confusion Matrix ResNet50v2@(512)
 
@@ -160,8 +210,17 @@ These are the final results for COVID-Net with a ResNet50v2 backbone with img_si
 |Pneumonia|    7  |   92     |     1     |
 |COVID-19 |    0  |    3     |    43     | 
 
+## Confusion Matrix EfficientNetB4@(512)
+
+|         | Normal|Pneumonia |  COVID-19 |
+|:-------:|:-----:|:--------:|:---------:|
+|Normal   |   85  |   15     |     0     |
+|Pneumonia|    5  |   91     |     4     |
+|COVID-19 |    0  |    0     |    46     | 
+
 ## Pretrained Models
 |  Type | COVID-19 Sensitivity |                       Path                        |
 |:-----:|:--------------------:|:-------------------------------------------------:|
-|  hdf5 |         89.0         | `/home/rubenh/Covid19-HPML-static/checkpoint/cp-224.hdf5`|
-|  hdf5 |         93.5         | `/home/rubenh/Covid19-HPML-static/checkpoint/cp-512.hdf5`|
+|  hdf5 |         89.0         | `/home/rubenh/Covid19-HPML-static/checkpoint/cp-224-resnet50v2.hdf5`|
+|  hdf5 |         93.5         | `/home/rubenh/Covid19-HPML-static/checkpoint/cp-512-resnet50v2.hdf5`|
+|  hdf5 |        100.0         | `/home/rubenh/Covid19-HPML-static/checkpoint/cp-512-efficientnet.hdf5`|

@@ -33,15 +33,20 @@ OMP_NUM_THREADS=40 KERAS_BACKEND="tensorflow" python autoimage.py
         "mean": 0.6073819847480563
     },
     "budget: 60": {
-        "configs": 2,
+        "configs": 5,
         "incumbent": 0.7791666666666667,
-        "mean": 0.7273842592592592
+        "mean": 0.6748898982281336
     },
-    "runtime": "2:42:38.478566"
+    "runtime": "4:22:56.664665"
 }
 ```
 
-* Incumbent configuration (60 epochs)
+* Incumbent configuration (60 epochs) [1]
+```json
+[[1, 0, 8], 60.0, {"submitted": 1586639778.370423, "started": 1586639778.3705494, "finished": 1586640966.0534487}, {"loss": -0.7791666666666667, "info": {"train_loss": 0.7766528717229064, "train_balanced_accuracy": 0.6164189321010349, "val_balanced_accuracy": 0.7791666666666667, "epochs": 37, "model_parameters": 7706577, "learning_rate": 7.530287316575816e-10, "checkpoint": "3class_280balanced_ba_ce/checkpoints/checkpoint_(1, 0, 8)_Budget_60.pt", "train_datapoints": 717, "val_datapoints": 80}, "losses": -0.7791666666666667}, null]
+```
+
+* Incumbent configuration (60 epochs) [2]
 ```json
 {
     "CreateImageDataLoader:batch_size": 10,
