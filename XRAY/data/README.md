@@ -21,7 +21,7 @@ Data comes from:
 * [Covid-19-USF](https://github.com/hellorp1990/Covid-19-USF) positive COVID-19 examples from training and validation
 * All other images come from [CheXpert](https://stanfordmlgroup.github.io/competitions/chexpert/)
 
-A simple dataset exploration with a linear classifier shows:
+Lin. classifier on 32x32px resized examples:
 ```
                             precision    recall  f1-score   support
 

@@ -14,3 +14,12 @@
 *assets*
 *rsna-pneumonia-detection-challenge*
 *.gz
+*idea*
+*.xml
+*.out
+*.pth
+*.p
+*.json
+*.nl
+*surfsara.nl
+*.idea*

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="SshConfigs">
-    <configs>
-      <sshConfig authType="PASSWORD" host="lisa.surfsara.nl" id="edae6547-fdfa-49ff-b575-5265abaa00b9" port="22" nameFormat="DESCRIPTIVE" username="jorism" />
-    </configs>
-  </component>
-</project>

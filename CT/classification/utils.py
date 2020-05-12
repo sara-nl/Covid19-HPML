@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 import pdb
 
 
@@ -21,9 +21,10 @@ def calc_multi_cls_measures(probs, label):
                            zero_division=0., pos_label=1)
     f1s = f1_score(label, preds, average='binary', pos_label=1, labels=range(n_classes),
                    zero_division=0.)
+    aucs = roc_auc_score(label, preds)
 
     metric_collects = {'accuracy': accuracy, 'precisions': precisions,
-                       'recalls': recalls, 'f1': f1s}
+                       'recalls': recalls, 'f1': f1s, 'auc': aucs}
     return metric_collects
 
 
@@ -66,9 +67,11 @@ def print_progress(epoch=None, n_epoch=None, n_iter=None, iters_one_batch=None,
     print(log_str)
 
 
-def print_epoch_progress(train_loss, val_loss, time_duration, train_metric,
-                         val_metric):
+def print_epoch_progress(epoch, n_epochs, train_loss, val_loss,
+                         time_duration, train_metric, val_metric):
     """Print all the information after each epoch.
+    :epoch: int, the currents epoch
+    :n_epochs: int, the total number of epochs
     :train_loss: average training loss
     :val_loss: average validation loss
     :time_duration: time duration for current epoch
@@ -76,11 +79,15 @@ def print_epoch_progress(train_loss, val_loss, time_duration, train_metric,
     :val_metric_collects: a performance dictionary for validation
     :returns: None
     """
+    log_str = 'Epoch {}/{}|'.format(epoch, n_epochs)
+
     train_acc, val_acc = train_metric['accuracy'], val_metric['accuracy']
     train_prec, val_prec = train_metric['precisions'], val_metric['precisions']
     train_recalls, val_recalls = train_metric['recalls'], val_metric['recalls']
     train_f1, val_f1 = train_metric['f1'], val_metric['f1']
-    log_str = 'Train/Val| Loss: {:.4f}/{:.4f}|'.format(train_loss, val_loss)
+    train_auc, val_auc = train_metric['auc'], val_metric['auc']
+
+    log_str += 'Train/Val| Loss: {:.4f}/{:.4f}|'.format(train_loss, val_loss)
     log_str += 'Acc: {:.4f}/{:.4f}|'.format(train_acc, val_acc)
 
     templ = 'Pr: ' + ', '.join(['{:.4f}'] * 1) + '/'
@@ -97,6 +104,11 @@ def print_epoch_progress(train_loss, val_loss, time_duration, train_metric,
     log_str += templ.format(train_f1)
     templ = ', '.join(['{:.4f}'] * 1) + '|'
     log_str += templ.format(val_f1)
+
+    templ = 'AUC: ' + ', '.join(['{:.4f}'] * 1) + '/'
+    log_str += templ.format(train_auc)
+    templ = ', '.join(['{:.4f}'] * 1) + '|'
+    log_str += templ.format(val_auc)
 
     log_str += 'T(s) {:.2f}'.format(time_duration)
     print(log_str)

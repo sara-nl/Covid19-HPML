@@ -2,7 +2,7 @@ import os
 import shutil
 
 
-textfiles = [x for x in os.listdir('.') if '.txt' in x]
+textfiles = [x for x in os.listdir('..') if '.txt' in x]
 
 for textfile in textfiles:
     with open(textfile, 'r') as f:
