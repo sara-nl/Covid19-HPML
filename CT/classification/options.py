@@ -1,5 +1,6 @@
 import argparse
 import time
+import os
 
 
 def parse_arguments():
@@ -18,6 +19,10 @@ def parse_arguments():
     parser.add_argument('--lr', type=float, default=0.0001)
     parser.add_argument('--epochs', type=int, default=3000)
     parser.add_argument('--img_size', type=int, default=512, help='Input image size')
+    parser.add_argument('--data_root', type=str, default=os.path.join('data', 'train'))
+    parser.add_argument('--folder1', type=str, default='brazilian')
+    parser.add_argument('--folder2', type=str, default='zenodo')
+    parser.add_argument('--folder3', type=str, default='medical_segmentation')
 
     # Learning rate scheduler options
     parser.add_argument('--lr_scheduler', type=str, default=None, choices=['plateau', 'step', 'cosine'])
@@ -32,6 +37,7 @@ def parse_arguments():
 
     # Other options
     parser.add_argument('--seed', type=int, default=123)
+    parser.add_argument('--num_workers', type=int, default=os.cpu_count())
 
     opts = parser.parse_args()
 

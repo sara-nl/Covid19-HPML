@@ -12,8 +12,7 @@ import torch.nn.functional as F
 import utils
 
 
-def train_model(model, train_loader, epoch, num_epochs, optimizer, writer,
-                current_lr, log_every=100):
+def train_model(model, train_loader, optimizer, opts):
     n_classes = model.n_classes
     metric = torch.nn.CrossEntropyLoss()
 
@@ -24,9 +23,7 @@ def train_model(model, train_loader, epoch, num_epochs, optimizer, writer,
 
     for i, (image, label) in enumerate(train_loader):
         optimizer.zero_grad()
-        if torch.cuda.is_available():
-            image = image.cuda()
-            label = label.cuda()
+        image, label = utils.move_to([image, label], opts.device)
 
         prediction = model.forward(image.float())
         loss = metric(prediction, label.long())
@@ -45,27 +42,18 @@ def train_model(model, train_loader, epoch, num_epochs, optimizer, writer,
     return train_loss_epoch, metric_collects
 
 
-def evaluate_model(model, val_loader, epoch, num_epochs, writer, current_lr,
-                   log_every=20):
+def evaluate_model(model, val_loader, opts):
     n_classes = model.n_classes
     metric = torch.nn.CrossEntropyLoss()
 
     model.eval()
-    for m in model.modules():
-        if isinstance(m, nn.BatchNorm2d):
-            m.train()
-            m.weight.requires_grad = False
-            m.bias.requires_grad = False
 
     y_probs = np.zeros((0, n_classes), np.float)
     y_trues = np.zeros((0), np.int)
     losses = []
 
     for i, (image, label) in enumerate(val_loader):
-
-        if torch.cuda.is_available():
-            image = image.cuda()
-            label = label.cuda()
+        image, label = utils.move_to([image, label], opts.device)
 
         prediction = model.forward(image.float())
         loss = metric(prediction, label.long())

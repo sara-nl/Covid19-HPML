@@ -117,3 +117,13 @@ def print_epoch_progress(epoch, n_epochs, train_loss, val_loss,
 def get_lr(optimizer):
     for param_group in optimizer.param_groups:
         return param_group['lr']
+
+
+def move_to(var, device):
+    if isinstance(var, dict):
+        return {k: move_to(v, device) for k, v in var.items()}
+    elif isinstance(var, list):
+        return [move_to(v, device) for v in var]
+    elif isinstance(var, tuple):
+        return (move_to(v, device) for v in var)
+    return var.to(device)

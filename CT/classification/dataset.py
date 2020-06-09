@@ -1,10 +1,13 @@
 import torchvision
+import torch
+import os
+import copy
 from torchvision import transforms
 import matplotlib.pyplot as plt
 import numpy as np
 
 
-def get_train_dataset(root, opts):
+def get_train_dataset(root, folder1, folder2, folder3, opts):
     """ Load the COVID classification training dataset as an ImageFolder dataset """
     normalize = transforms.Normalize(mean=[0.45271412, 0.45271412, 0.45271412],
                                      std=[0.33165374, 0.33165374, 0.33165374])
@@ -18,8 +21,16 @@ def get_train_dataset(root, opts):
         normalize
     ])
 
-    dataset = torchvision.datasets.ImageFolder(root, transform=train_transforms)
-    return dataset
+    dataset1 = torchvision.datasets.ImageFolder(os.path.join(root, folder1), transform=train_transforms)
+    dataset2 = torchvision.datasets.ImageFolder(os.path.join(root, folder2), transform=train_transforms)
+    dataset3 = torchvision.datasets.ImageFolder(os.path.join(root, folder3), transform=train_transforms)
+
+    assert dataset1.class_to_idx == dataset2.class_to_idx == dataset3.class_to_idx
+
+    combined_dataset = torch.utils.data.ConcatDataset([dataset3, dataset2, dataset1])
+    combined_dataset.class_to_idx = copy.deepcopy(dataset1.class_to_idx)
+
+    return combined_dataset
 
 
 def get_val_dataset(root, opts):
@@ -71,7 +82,7 @@ def make_weights_for_balanced_classes(images, num_classes):
     weight_per_class = [0.] * num_classes
     N = float(sum(count))
     for i in range(num_classes):
-        weight_per_class[i] = N/float(count[i])
+        weight_per_class[i] = N / float(count[i])
     weight = [0] * len(images)
     for idx, val in enumerate(images):
         weight[idx] = weight_per_class[val[1]]
@@ -100,5 +111,3 @@ if __name__ == '__main__':
         plt.imshow(data[0].numpy().transpose(1, 2, 0))
         plt.show()
         print()
-
-

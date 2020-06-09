@@ -45,30 +45,29 @@ def main(opts):
     ##########################################################################
     writer = SummaryWriter(os.path.join(log_dir, opts.run_name), flush_secs=5)
 
-    train_dataset = get_train_dataset(os.path.join('data', 'train'), opts)
-    weights = make_weights_for_balanced_classes(train_dataset.imgs, len(train_dataset.classes))
-    weights = torch.DoubleTensor(weights)
-    sampler = torch.utils.data.sampler.WeightedRandomSampler(weights, len(weights))
+    train_dataset = get_train_dataset(opts.data_root, opts.folder1, opts.folder2, opts.folder3, opts)
     train_loader = torch.utils.data.DataLoader(
-        train_dataset, batch_size=opts.batch_size, num_workers=os.cpu_count(),
-        drop_last=False, sampler=sampler)
+        train_dataset, batch_size=opts.batch_size, num_workers=opts.num_workers, drop_last=False)
 
     val_dataset = get_val_dataset(os.path.join('data', 'val'), opts)
     val_loader = torch.utils.data.DataLoader(
-        val_dataset, batch_size=opts.batch_size, shuffle=False, num_workers=os.cpu_count(),
-        drop_last=False)
+        val_dataset, batch_size=opts.batch_size, shuffle=False, num_workers=opts.num_workers, drop_last=False)
 
     test_dataset = get_test_dataset(os.path.join('data', 'test'), opts)
     test_loader = torch.utils.data.DataLoader(
-        test_dataset, batch_size=opts.batch_size, shuffle=False, num_workers=os.cpu_count(),
-        drop_last=False)
+        test_dataset, batch_size=opts.batch_size, shuffle=False, num_workers=opts.num_workers, drop_last=False)
 
     assert train_dataset.class_to_idx == val_dataset.class_to_idx == test_dataset.class_to_idx, "Mapping not correct"
 
     model = get_model(opts)
 
+    opts.device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
+
     if torch.cuda.is_available():
-        model = model.cuda()
+        model = model.to(opts.device)
+    if torch.cuda.device_count() > 1:
+        model = nn.DataParallel(model)
+
     optimizer = optim.Adam(model.parameters(), lr=opts.lr)
 
     if opts.lr_scheduler == "plateau":
@@ -101,13 +100,10 @@ def main(opts):
         ############################################################
         #  The actual training and validation step for each epoch  #
         ############################################################
-        train_loss, train_metric = train_model(
-            model, train_loader, epoch, opts.epochs, optimizer, writer,
-            current_lr, opts.log_every)
+        train_loss, train_metric = train_model(model, train_loader, optimizer, opts)
 
         with torch.no_grad():
-            val_loss, val_metric = evaluate_model(
-                model, val_loader, epoch, opts.epochs, writer, current_lr)
+            val_loss, val_metric = evaluate_model(model, val_loader, opts)
 
         ##############################
         #  Write to summary writer   #
