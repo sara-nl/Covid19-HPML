@@ -44,7 +44,7 @@ def main(opts):
     ##########################################################################
     writer = SummaryWriter(os.path.join(log_dir, opts.run_name), flush_secs=5)
 
-    train_dataset = get_train_dataset(opts.data_root, opts.folder1, opts.folder2, opts.folder3, opts)
+    train_dataset = get_train_dataset(opts.data_root, opts, opts.folder1, opts.folder2, opts.folder3)
     train_loader = torch.utils.data.DataLoader(
         train_dataset, batch_size=opts.batch_size, num_workers=opts.num_workers, drop_last=False, shuffle=True)
 
@@ -74,7 +74,7 @@ def main(opts):
             optimizer, patience=opts.patience, factor=.3, threshold=1e-4, verbose=True)
     elif opts.lr_scheduler == "step":
         scheduler = torch.optim.lr_scheduler.StepLR(
-            optimizer, step_size=3, gamma=opts.gamma)
+            optimizer, step_size=opts.step_size, gamma=opts.gamma)
     elif opts.lr_scheduler == 'cosine':
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
             optimizer, T_max=100, eta_min=1e-8)
@@ -182,8 +182,8 @@ def main(opts):
     print(f'Best validation AUC: {best_val_auc}')
 
     with torch.no_grad():
-        test_loss, test_metric = evaluate_model(
-            model, test_loader, epoch, opts.epochs, writer, current_lr)
+        model.load_state_dict(torch.load(os.path.join(model_dir, opts.run_name, 'best_state_dict.pth')))
+        test_loss, test_metric = evaluate_model(model, test_loader, opts)
 
     print(f'The best test F1: {test_metric["f1"]}')
     print(f'The best test auc: {test_metric["auc"]}')

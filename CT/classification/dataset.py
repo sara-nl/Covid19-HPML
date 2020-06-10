@@ -7,7 +7,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def get_train_dataset(root, folder1, folder2, folder3, opts):
+def get_train_dataset_by_oversampling(root, challenge_folder, folder2, folder3):
+
+
+def get_train_dataset(root, opts, folder1, folder2=None, folder3=None):
     """ Load the COVID classification training dataset as an ImageFolder dataset """
     normalize = transforms.Normalize(mean=[0.45271412, 0.45271412, 0.45271412],
                                      std=[0.33165374, 0.33165374, 0.33165374])
@@ -22,12 +25,16 @@ def get_train_dataset(root, folder1, folder2, folder3, opts):
     ])
 
     dataset1 = torchvision.datasets.ImageFolder(os.path.join(root, folder1), transform=train_transforms)
-    dataset2 = torchvision.datasets.ImageFolder(os.path.join(root, folder2), transform=train_transforms)
-    dataset3 = torchvision.datasets.ImageFolder(os.path.join(root, folder3), transform=train_transforms)
 
-    assert dataset1.class_to_idx == dataset2.class_to_idx == dataset3.class_to_idx
+    if folder2 is not None:
+        dataset2 = torchvision.datasets.ImageFolder(os.path.join(root, folder2), transform=train_transforms)
+        assert dataset1.class_to_idx == dataset2.class_to_idx
 
-    combined_dataset = torch.utils.data.ConcatDataset([dataset3, dataset2, dataset1])
+    if folder3 is not None:
+        dataset3 = torchvision.datasets.ImageFolder(os.path.join(root, folder3), transform=train_transforms)
+        assert dataset1.class_to_idx == dataset3.class_to_idx
+
+    combined_dataset = torch.utils.data.ConcatDataset([d for d in [dataset1, dataset2, dataset3] if d is not None])
     combined_dataset.class_to_idx = copy.deepcopy(dataset1.class_to_idx)
 
     return combined_dataset
