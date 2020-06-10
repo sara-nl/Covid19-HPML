@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import time
-import pdb
 import json
 import random
 from pprint import pprint
@@ -9,9 +8,9 @@ from tensorboardX import SummaryWriter
 import torch
 import torch.optim as optim
 import torch.nn as nn
-import torch.nn.functional as F
+import pdb
 
-from dataset import get_train_dataset, get_val_dataset, get_test_dataset, make_weights_for_balanced_classes
+from dataset import get_train_dataset, get_val_dataset, get_test_dataset
 from models.model_utils import get_model
 import options
 from train import train_model, evaluate_model
@@ -47,7 +46,7 @@ def main(opts):
 
     train_dataset = get_train_dataset(opts.data_root, opts.folder1, opts.folder2, opts.folder3, opts)
     train_loader = torch.utils.data.DataLoader(
-        train_dataset, batch_size=opts.batch_size, num_workers=opts.num_workers, drop_last=False)
+        train_dataset, batch_size=opts.batch_size, num_workers=opts.num_workers, drop_last=False, shuffle=True)
 
     val_dataset = get_val_dataset(os.path.join('data', 'val'), opts)
     val_loader = torch.utils.data.DataLoader(
@@ -61,21 +60,21 @@ def main(opts):
 
     model = get_model(opts)
 
-    opts.device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
+    opts.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    if torch.cuda.is_available():
-        model = model.to(opts.device)
-    if torch.cuda.device_count() > 1:
+    if torch.cuda.device_count() > 1 and not opts.no_data_parallel:
         model = nn.DataParallel(model)
 
-    optimizer = optim.Adam(model.parameters(), lr=opts.lr)
+    model = model.to(opts.device)
+
+    optimizer = optim.RMSprop(model.parameters(), lr=opts.lr, alpha=0.9, weight_decay=1e-5, momentum=0.9)
 
     if opts.lr_scheduler == "plateau":
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-            optimizer, patience=3, factor=.3, threshold=1e-4, verbose=True)
+            optimizer, patience=opts.patience, factor=.3, threshold=1e-4, verbose=True)
     elif opts.lr_scheduler == "step":
         scheduler = torch.optim.lr_scheduler.StepLR(
-            optimizer, step_size=200, gamma=opts.gamma)
+            optimizer, step_size=3, gamma=opts.gamma)
     elif opts.lr_scheduler == 'cosine':
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
             optimizer, T_max=100, eta_min=1e-8)
@@ -148,7 +147,7 @@ def main(opts):
         if val_acc > best_val_accu:
             best_val_accu = val_acc
             if bool(opts.save_model):
-                torch.save(model, os.path.join(model_dir, opts.run_name, 'best.pth'))
+                torch.save(model.state_dict(), os.path.join(model_dir, opts.run_name, 'best_state_dict.pth'))
 
         if val_loss < best_val_loss:
             best_val_loss = val_loss
@@ -162,8 +161,8 @@ def main(opts):
 
         if val_f1 > best_val_f1:
             best_val_f1 = val_f1
-            print(f'The best F1-score is now {best_val_f1}')
-            print(f'The accuracy and AUC are now {val_acc} and {val_auc}')
+            print(f'The best validation F1-score is now {best_val_f1}')
+            print(f'The validation accuracy and AUC are now {val_acc} and {val_auc}')
 
         if val_auc > best_val_auc:
             best_val_auc = val_auc

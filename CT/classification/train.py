@@ -1,19 +1,14 @@
-import os
 import numpy as np
-import time
-import pdb
-
-from tensorboardX import SummaryWriter
 import torch
-import torch.optim as optim
-import torch.nn as nn
 import torch.nn.functional as F
+from tqdm import tqdm
+import pdb
 
 import utils
 
 
 def train_model(model, train_loader, optimizer, opts):
-    n_classes = model.n_classes
+    n_classes = opts.n_classes
     metric = torch.nn.CrossEntropyLoss()
 
     y_probs = np.zeros((0, n_classes), np.float)
@@ -21,7 +16,7 @@ def train_model(model, train_loader, optimizer, opts):
     losses = []
     model.train()
 
-    for i, (image, label) in enumerate(train_loader):
+    for i, (image, label) in enumerate(tqdm(train_loader)):
         optimizer.zero_grad()
         image, label = utils.move_to([image, label], opts.device)
 
@@ -33,6 +28,7 @@ def train_model(model, train_loader, optimizer, opts):
         loss_value = loss.item()
         losses.append(loss_value)
         y_prob = F.softmax(prediction, dim=1)
+
         y_probs = np.concatenate([y_probs, y_prob.detach().cpu().numpy()])
         y_trues = np.concatenate([y_trues, label.cpu().numpy()])
 
@@ -43,7 +39,7 @@ def train_model(model, train_loader, optimizer, opts):
 
 
 def evaluate_model(model, val_loader, opts):
-    n_classes = model.n_classes
+    n_classes = opts.n_classes
     metric = torch.nn.CrossEntropyLoss()
 
     model.eval()
@@ -52,7 +48,7 @@ def evaluate_model(model, val_loader, opts):
     y_trues = np.zeros((0), np.int)
     losses = []
 
-    for i, (image, label) in enumerate(val_loader):
+    for i, (image, label) in enumerate(tqdm(val_loader)):
         image, label = utils.move_to([image, label], opts.device)
 
         prediction = model.forward(image.float())

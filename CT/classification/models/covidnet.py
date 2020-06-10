@@ -66,7 +66,7 @@ class CovidNet(nn.Module):
             'pexp4_3': [2048, 2048],
         }
 
-        self.add_module('conv1', nn.Conv2d(in_channels=3, out_channels=64, kernel_size=7, stride=2, padding=3))
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=7, stride=2, padding=3)
         for key in filters:
 
             if ('pool' in key):

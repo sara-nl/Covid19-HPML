@@ -1,6 +1,7 @@
-module use ~/environment-modules-lisa
-module load 2020
-module load TensorFlow/2.1.0-foss-2019b-Python-3.7.4-CUDA-10.1.243
+module purge
+module load 2019
+module load Python/3.6.6-foss-2019b
+module load CUDA/10.1.243
 
 conda deactivate
 
