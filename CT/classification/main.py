@@ -8,9 +8,11 @@ from tensorboardX import SummaryWriter
 import torch
 import torch.optim as optim
 import torch.nn as nn
+from collections import defaultdict
 import pdb
 
-from dataset import get_train_dataset, get_val_dataset, get_test_dataset
+from dataset import get_train_dataset, get_train_dataset_by_oversampling, get_pretrain_and_finetune_datast, \
+    get_val_dataset, get_test_dataset
 from models.model_utils import get_model
 import options
 from train import train_model, evaluate_model
@@ -44,17 +46,27 @@ def main(opts):
     ##########################################################################
     writer = SummaryWriter(os.path.join(log_dir, opts.run_name), flush_secs=5)
 
-    train_dataset = get_train_dataset(opts.data_root, opts, opts.folder1, opts.folder2, opts.folder3)
+    if opts.train_mode == 'combined':
+        train_dataset = get_train_dataset(opts.data_root, opts, opts.folder1, opts.folder2, opts.folder3)
+    elif opts.train_mode == 'oversampling':
+        train_dataset = get_train_dataset_by_oversampling(opts.data_root, opts, opts.folder1, opts.folder2,
+                                                          opts.folder3)
+    elif opts.train_mode == 'pretrain_and_finetune':
+        train_dataset, finetune_dataset = get_pretrain_and_finetune_datast(opts.data_root, opts, opts.folder1,
+                                                                           opts.folder2, opts.folder3)
+        finetune_loader = torch.utils.data.DataLoader(
+            finetune_dataset, batch_size=opts.batch_size, num_workers=opts.num_workers, drop_last=False, shuffle=True)
+
     train_loader = torch.utils.data.DataLoader(
         train_dataset, batch_size=opts.batch_size, num_workers=opts.num_workers, drop_last=False, shuffle=True)
 
     val_dataset = get_val_dataset(os.path.join('data', 'val'), opts)
     val_loader = torch.utils.data.DataLoader(
-        val_dataset, batch_size=opts.batch_size, shuffle=False, num_workers=opts.num_workers, drop_last=False)
+        val_dataset, batch_size=opts.eval_batch_size, shuffle=False, num_workers=opts.num_workers, drop_last=False)
 
     test_dataset = get_test_dataset(os.path.join('data', 'test'), opts)
     test_loader = torch.utils.data.DataLoader(
-        test_dataset, batch_size=opts.batch_size, shuffle=False, num_workers=opts.num_workers, drop_last=False)
+        test_dataset, batch_size=opts.eval_batch_size, shuffle=False, num_workers=opts.num_workers, drop_last=False)
 
     assert train_dataset.class_to_idx == val_dataset.class_to_idx == test_dataset.class_to_idx, "Mapping not correct"
 
@@ -101,6 +113,12 @@ def main(opts):
         ############################################################
         train_loss, train_metric = train_model(model, train_loader, optimizer, opts)
 
+        if epoch == opts.finetune_epoch and opts.train_mode == 'pretrain_and_finetune':
+            train_loader = finetune_loader
+            optimizer.state = defaultdict(dict)  # Also reset the optimizer
+            optimizer.param_groups[0]['lr'] = opts.lr  # To be on the safe side, manually reset the learning rate
+
+        # Run the validation set
         with torch.no_grad():
             val_loss, val_metric = evaluate_model(model, val_loader, opts)
 
