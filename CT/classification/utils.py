@@ -1,5 +1,5 @@
 import numpy as np
-import pandas as pd
+import torch
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 import pdb
 
@@ -127,3 +127,17 @@ def move_to(var, device):
     elif isinstance(var, tuple):
         return (move_to(v, device) for v in var)
     return var.to(device)
+
+
+def get_lr_scheduler(optimizer, opts):
+    if opts.lr_scheduler == "plateau":
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer, patience=opts.patience, factor=.3, threshold=1e-4, verbose=True)
+    elif opts.lr_scheduler == "step":
+        scheduler = torch.optim.lr_scheduler.StepLR(
+            optimizer, step_size=opts.step_size, gamma=opts.gamma)
+    elif opts.lr_scheduler == 'cosine':
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+            optimizer, T_max=100, eta_min=1e-8)
+
+    return scheduler

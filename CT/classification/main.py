@@ -16,7 +16,7 @@ from dataset import get_train_dataset, get_train_dataset_by_oversampling, get_pr
 from models.model_utils import get_model
 import options
 from train import train_model, evaluate_model
-from utils import print_epoch_progress, get_lr, calc_multi_cls_measures
+from utils import print_epoch_progress, get_lr, get_lr_scheduler
 
 
 def main(opts):
@@ -80,16 +80,7 @@ def main(opts):
     model = model.to(opts.device)
 
     optimizer = optim.RMSprop(model.parameters(), lr=opts.lr, alpha=0.9, weight_decay=1e-5, momentum=0.9)
-
-    if opts.lr_scheduler == "plateau":
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-            optimizer, patience=opts.patience, factor=.3, threshold=1e-4, verbose=True)
-    elif opts.lr_scheduler == "step":
-        scheduler = torch.optim.lr_scheduler.StepLR(
-            optimizer, step_size=opts.step_size, gamma=opts.gamma)
-    elif opts.lr_scheduler == 'cosine':
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-            optimizer, T_max=100, eta_min=1e-8)
+    scheduler = get_lr_scheduler(optimizer, opts)
 
     best_val_loss = float('inf')
     best_val_accu = float(0)
@@ -115,8 +106,8 @@ def main(opts):
 
         if epoch == opts.finetune_epoch and opts.train_mode == 'pretrain_and_finetune':
             train_loader = finetune_loader
-            optimizer.state = defaultdict(dict)  # Also reset the optimizer
-            optimizer.param_groups[0]['lr'] = opts.lr  # To be on the safe side, manually reset the learning rate
+            optimizer = optim.RMSprop(model.parameters(), lr=opts.lr, alpha=0.9, weight_decay=1e-5, momentum=0.9)
+            scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=opts.step_size_finetuning, gamma=opts.gamma)
 
         # Run the validation set
         with torch.no_grad():

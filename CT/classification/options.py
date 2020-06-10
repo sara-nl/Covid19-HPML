@@ -36,6 +36,8 @@ def parse_arguments():
     parser.add_argument('--early_stopping', action='store_true', default=False)
     parser.add_argument('--gamma', type=float, default=0.8, help='Gamma for StepLR')
     parser.add_argument('--step_size', type=int, default=3, help='Step size of StepLR')
+    parser.add_argument('--step_size_finetuning', type=int, default=3,
+                        help='Step size for the StepLR in the finetuing phase')
 
     # Logging options
     parser.add_argument('--log-every', type=int, default=100)
