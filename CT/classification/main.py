@@ -191,7 +191,8 @@ def main(opts):
     print(f'Best validation AUC: {best_val_auc}')
 
     with torch.no_grad():
-        model.load_state_dict(torch.load(os.path.join(model_dir, opts.run_name, 'best_state_dict.pth')))
+        if opts.train_mode in ['combined', 'oversampling']:
+            model.load_state_dict(torch.load(os.path.join(model_dir, opts.run_name, 'best_state_dict.pth')))
         test_loss, test_metric = evaluate_model(model, test_loader, opts)
 
     print(f'The best test F1: {test_metric["f1"]}')
