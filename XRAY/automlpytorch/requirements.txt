@@ -12,7 +12,7 @@ chardet==3.0.4
 cirq==0.7.0
 cloudpickle==1.2.2
 ConfigSpace==0.4.12
-cryptography==2.7
+cryptography==3.2
 cvxopt==1.2.3
 cycler==0.10.0
 Cython==0.29.15
