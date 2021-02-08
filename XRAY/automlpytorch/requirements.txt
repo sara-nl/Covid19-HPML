@@ -38,7 +38,7 @@ graphviz==0.13.2
 grpcio==1.27.2
 h5py==2.10.0
 hpbandster==0.7.4
-httplib2==0.17.0
+httplib2==0.19.0
 icc-rt==2019.0
 idna==2.8
 imageio==2.8.0
