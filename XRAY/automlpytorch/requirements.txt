@@ -48,7 +48,7 @@ imgaug==0.4.0
 inflection==0.3.1
 intel-openmp==2019.0
 ipdb==0.13.2
-ipython==7.13.0
+ipython==7.16.3
 ipython-genutils==0.2.0
 jedi==0.16.0
 joblib==0.14.0
