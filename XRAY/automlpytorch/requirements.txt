@@ -86,7 +86,7 @@ PennyLane-qiskit==0.5.1
 pennylane-qulacs==0.0.2
 pexpect==4.8.0
 pickleshare==0.7.5
-Pillow==6.2.0
+Pillow==9.0.1
 ply==3.11
 prompt-toolkit==3.0.3
 protobuf==3.8.0
