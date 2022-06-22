@@ -8,7 +8,7 @@ joblib==0.14.1
 kiwisolver==1.2.0
 matplotlib==3.2.1
 networkx==2.4
-numpy==1.18.2
+numpy==1.22.0
 pandas==1.0.3
 Pillow==7.1.1
 protobuf==3.11.3
