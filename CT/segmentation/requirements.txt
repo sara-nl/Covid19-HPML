@@ -3,7 +3,7 @@ cycler==0.10.0
 decorator==4.4.2
 future==0.18.2
 imageio==2.8.0
-joblib==0.14.1
+joblib==1.2.0
 kiwisolver==1.1.0
 kornia==0.2.0
 linecache2==1.0.0
